@@ -1,0 +1,8 @@
+.idea/
+logs/
+data/
+ml1m.dat
+Dataset/
+
+
+*.pyc
