@@ -32,15 +32,12 @@ A diversity_bias of 0 produces the normal behavior, with no bias.
         self.updater = updater
         self.recurrent_layer = recurrent_layer
         self.tf_mem_frac = mem_frac
+        # self.framework = 'ktf' # Keras Tensor Flow
 
         self.name = "RNN with categorical cross entropy"
 
         self.set_keras_backend(self.backend)
 
-        if self.backend == 'tensorflow':
-            self.framework = 'ktf'
-        else:
-            self.framework = 'kth'
 
     def set_keras_backend(self, backend):
         if be.backend() != backend:
@@ -52,7 +49,7 @@ A diversity_bias of 0 produces the normal behavior, with no bias.
         """Return the name of the file to save the current model
         """
         # filename = "rnn_cce_db"+str(self.diversity_bias)+"_r"+str(self.regularization)+"_"+self._common_filename(epochs)
-        filename = "rnn_cce_" + self._common_filename(epochs) + "." + self.framework
+        filename = "rnn_cce_" + self._common_filename(epochs) + ".hdf5"
         return filename
 
     def prepare_networks(self, n_items):

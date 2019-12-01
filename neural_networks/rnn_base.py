@@ -17,7 +17,6 @@ from keras.models import Sequential, load_model, Model
 from keras import callbacks
 from keras.callbacks import ModelCheckpoint
 from helpers import evaluation
-from keras.callbacks import TensorBoard
 
 
 class RNNBase(object):
@@ -64,7 +63,7 @@ class RNNBase(object):
                         }
 
     def _common_filename(self, epochs):
-        '''Common parts of the filename accros sub classes.
+        '''Common parts of the filename across sub classes.
 		'''
         filename = "ml" + str(self.max_length) + "_bs" + str(self.batch_size) + "_ne" + str(
             epochs) + "_" + self.recurrent_layer.name + "_" + self.updater.name + "_" + self.target_selection.name
@@ -113,8 +112,10 @@ class RNNBase(object):
 
         # filter out viewed items
         output[0][[i[0] for i in sequence]] = -np.inf
+
         # exclude items given in args
         # output[exclude] = -np.inf
+
         # find top k according to output
         return list(np.argpartition(-output[0], list(range(k)))[:k])
 
