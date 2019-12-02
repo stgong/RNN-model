@@ -63,7 +63,7 @@ A diversity_bias of 0 produces the normal behavior, with no bias.
             # config = tf.ConfigProto()
             config = tf.compat.v1.ConfigProto()
             config.gpu_options.per_process_gpu_memory_fraction = self.tf_mem_frac
-            set_session(tf.compat.v1.Session(config=config))
+            tf.compat.v1.Session(config=config)
 
         self.model = Sequential()
         if self.recurrent_layer.embedding_size > 0:
