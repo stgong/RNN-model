@@ -1,0 +1,11 @@
+mkdir remote
+virtualenv remote_env
+virtual -p python3 remote_env
+
+
+source remote_env/bin/activate
+
+pip install jupyter
+pip install ipykernel
+
+git rm --cached remote/RNN-model
