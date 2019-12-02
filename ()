@@ -1,0 +1,14 @@
+
+# Bitte geben Sie eine Commit-Beschreibung für Ihre Änderungen ein. Zeilen,
+# die mit '#' beginnen, werden ignoriert, und eine leere Beschreibung
+# bricht den Commit ab.
+#
+# Commit-Ersteller: nicolakang <nicolakang@mailbox.tu-berlin.de>
+#
+# Auf Branch master
+# Ihr Branch ist 1 Commit vor 'origin/master'.
+#   (benutzen Sie "git push", um lokale Commits zu publizieren)
+#
+# zum Commit vorgemerkte Änderungen:
+#	geändert:       run_command_remote.ipynb
+#
