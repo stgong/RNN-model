@@ -8,9 +8,9 @@ import datetime
 
 # Data directory
 if 'xun' in os.getcwd():
-    DEFAULT_DIR = os.getcwd() + '/Dataset/'
+    DEFAULT_DIR = os.getcwd() + '/Dataset'
 else:
-    DEFAULT_DIR = os.getcwd() + '/'
+    DEFAULT_DIR = os.getcwd()
 
 
 class DataHandler(object):
@@ -44,16 +44,16 @@ class DataHandler(object):
 
         self.extended_training_set = extended_training_set
         if extended_training_set:
-            self.training_set = SequenceGenerator(self.dirname + 'data/train_set_sequences+', shuffle=shuffle_training)
+            self.training_set = SequenceGenerator(self.dirname + '/data/train_set_sequences+', shuffle=shuffle_training)
         else:
-            self.training_set = SequenceGenerator(self.dirname + 'data/train_set_sequences', shuffle=shuffle_training)
-        self.validation_set = SequenceGenerator(self.dirname + 'data/val_set_sequences')
-        self.test_set = SequenceGenerator(self.dirname + 'data/test_set_sequences')
+            self.training_set = SequenceGenerator(self.dirname + '/data/train_set_sequences', shuffle=shuffle_training)
+        self.validation_set = SequenceGenerator(self.dirname + '/data/val_set_sequences')
+        self.test_set = SequenceGenerator(self.dirname + '/data/test_set_sequences')
 
         self._load_stats()
 
     def training_set_triplets(self):
-        with open(self.dirname + 'data/train_set_triplets') as f:
+        with open(self.dirname + '/data/train_set_triplets') as f:
             for line in f:
                 line = line.split()
                 yield {'user_id': int(line[0]), 'item_id': int(line[1]), 'rating': float(line[2])}
@@ -64,15 +64,15 @@ class DataHandler(object):
 		'''
 
         if not hasattr(self.training_set, '_item_rating'):
-            if os.path.isfile(self.dirname + 'data/training_set_item_rating.npy'):
-                self.training_set._item_rating = np.load(self.dirname + 'data/training_set_item_rating.npy')
+            if os.path.isfile(self.dirname + '/data/training_set_item_rating.npy'):
+                self.training_set._item_rating = np.load(self.dirname + '/data/training_set_item_rating.npy')
             else:
                 self.training_set._item_rating = np.zeros((self.n_users, self.n_items))
-                with open(self.dirname + 'data/train_set_triplets') as f:
+                with open(self.dirname + '/data/train_set_triplets') as f:
                     for line in f:
                         self.training_set._item_rating[int(line.split()[0]), int(line.split()[1])] = int(
                             line.split()[2])
-                np.save(self.dirname + 'data/training_set_item_rating.npy', self.training_set._item_rating)
+                np.save(self.dirname + '/data/training_set_item_rating.npy', self.training_set._item_rating)
 
         return self.training_set._item_rating
 
@@ -82,14 +82,14 @@ class DataHandler(object):
 		'''
 
         if not hasattr(self.training_set, '_item_pop'):
-            # if os.path.isfile(self.dirname + 'data/training_set_item_popularity.npy'):
-            # 	self.training_set._item_pop = np.load(self.dirname + 'data/training_set_item_popularity.npy')
+            # if os.path.isfile(self.dirname + '/data/training_set_item_popularity.npy'):
+            # 	self.training_set._item_pop = np.load(self.dirname + '/data/training_set_item_popularity.npy')
             # else:
             self.training_set._item_pop = np.zeros(self.n_items)
-            with open(self.dirname + 'data/train_set_triplets') as f:
+            with open(self.dirname + '/data/train_set_triplets') as f:
                 for line in f:
                     self.training_set._item_pop[int(line.split()[1])] += 1
-            np.save(self.dirname + 'data/training_set_item_popularity.npy', self.training_set._item_pop)
+            np.save(self.dirname + '/data/training_set_item_popularity.npy', self.training_set._item_pop)
 
         return self.training_set._item_pop
 
@@ -113,7 +113,7 @@ class DataHandler(object):
     def _load_stats(self):
         ''' Load informations about the dataset from dirname/data/stats
 		'''
-        with open(self.dirname + 'data/stats', 'r') as f:
+        with open(self.dirname + '/data/stats', 'r') as f:
             _ = f.readline()  # Line with column titles
             stats = f.readline().split()[1:]
             self.n_users, self.n_items, self.n_interactions, self.longest_sequence = map(int, stats[0:4])
