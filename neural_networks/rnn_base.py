@@ -90,7 +90,7 @@ class RNNBase(object):
         seq_by_max_length = sequence[-min(self.max_length, len(sequence)):]  # last max length or all
 
         # Prepare RNN input
-        if self.framework == 'ktf' and self.recurrent_layer.embedding_size > 0:
+        if self.recurrent_layer.embedding_size > 0:
             X = np.zeros((1, self.max_length), dtype=np.int32)  # ktf embedding requires movie-id sequence, not one-hot
             X[0, :len(seq_by_max_length)] = np.array([item[0] for item in seq_by_max_length])
         else:
@@ -98,17 +98,8 @@ class RNNBase(object):
             X[0, :len(seq_by_max_length), :] = np.array(list(map(lambda x: self._get_features(x), seq_by_max_length)))
 
         # Run RNN
-        if self.framework == 'tf':
-            length = [min(self.max_length, len(sequence))]
-            output = self.sess.run(self.softmax, feed_dict={self.X: X, self.length: length})
-        elif self.framework == 'th':
-            if not hasattr(self, 'predict_function'):
-                self._compile_predict_function()
-            mask = np.zeros((1, self.max_length))
-            mask[0, :len(seq_by_max_length)] = 1
-            output = self.predict_function(X, mask)
-        else:
-            output = self.model.predict_on_batch(X)
+
+        output = self.model.predict_on_batch(X)
 
         # filter out viewed items
         output[0][[i[0] for i in sequence]] = -np.inf
@@ -172,7 +163,7 @@ class RNNBase(object):
         filename = {}
 
         try:
-            filepath = save_dir + self.framework + "/" + self._get_model_filename(
+            filepath = save_dir + self._get_model_filename(
                 round(time() - time1, 3))
 
             checkpoint = ModelCheckpoint(filepath, verbose=1,
@@ -212,13 +203,13 @@ class RNNBase(object):
             # Save model
             run_nb = len(train_costs) - 1
             if autosave == 'All':
-                filename[run_nb] = save_dir + self.framework + "/" + self._get_model_filename(
+                filename[run_nb] = save_dir + self._get_model_filename(
                     round(epochs[-1], 3))
                 self._save(filename[run_nb])
             elif autosave == 'Best':
                 pareto_runs = self.get_pareto_front(metrics, validation_metrics)
                 if run_nb in pareto_runs:
-                    filename[run_nb] = save_dir + self.framework + "/" + self._get_model_filename(
+                    filename[run_nb] = save_dir + self._get_model_filename(
                         round(epochs[-1], 3))
                     self._save(filename[run_nb])
                     to_delete = [r for r in filename if r not in pareto_runs]

@@ -7,7 +7,7 @@ import os
 import datetime
 
 # Data directory
-DEFAULT_DIR = os.getcwd() + '/Dataset'
+DEFAULT_DIR = os.getcwd() + '/Dataset/'
 
 
 class DataHandler(object):

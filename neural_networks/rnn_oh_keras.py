@@ -70,7 +70,7 @@ A diversity_bias of 0 produces the normal behavior, with no bias.
             # self.model.add(
             #     Embedding(self.n_items, embedding_matrix.shape[1], weights=[embedding_matrix], mask_zero=True,
             #               input_length=self.max_length, trainable=False))
-            self.model.add(Embedding(self.n_items, self.recurrent_layer.embedding_size, input_length=self.max_length))
+            self.model.add(Embedding(self.n_items, self.recurrent_layer.embedding_size, input_length=self.max_length, trainable=True))
             self.model.add(Masking(mask_value=0.0))
         else:
             self.model.add(Masking(mask_value=0.0, input_shape=(self.max_length, self.n_items)))
