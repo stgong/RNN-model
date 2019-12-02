@@ -60,7 +60,8 @@ A diversity_bias of 0 produces the normal behavior, with no bias.
             import tensorflow as tf
             from keras.backend.tensorflow_backend import set_session
             # config = tf.ConfigProto(log_device_placement=True)
-            config = tf.ConfigProto()
+            # config = tf.ConfigProto()
+            config = tf.compat.v1.ConfigProto()
             config.gpu_options.per_process_gpu_memory_fraction = self.tf_mem_frac
             set_session(tf.Session(config=config))
 
