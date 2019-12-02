@@ -14,7 +14,7 @@ from helpers.data_handling import DataHandler
 
 
 def get_file_name(predictor, args):
-    return args.dir + predictor.framework + "/" + re.sub('_ml' + str(args.max_length),
+    return args.dir + re.sub('_ml' + str(args.max_length),
                                                          '_ml' + str(args.training_max_length),
                                                          predictor._get_model_filename(args.number_of_batches))# + str(args.best_epoch)
 
