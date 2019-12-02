@@ -50,7 +50,7 @@ def main():
 	predictor.train(dataset,
 		progress=num(args.progress),
 		autosave=args.save,
-		save_dir=dataset.dirname + "models/" + args.dir,
+		save_dir=dataset.dirname + "/models/" + args.dir,
 		min_iterations=args.min_iter,
 		early_stopping=EsParse.get_early_stopper(args),
 		load_last_model=args.load_last_model,

@@ -20,7 +20,7 @@ def get_file_name(predictor, args):
 
 
 def find_models(predictor, dataset, args):
-    file = dataset.dirname + "models/" + get_file_name(predictor, args)
+    file = dataset.dirname + "/models/" + get_file_name(predictor, args)
     # print("filename : {}".format(file))
     return file
 
