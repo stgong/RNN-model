@@ -7,7 +7,10 @@ import os
 import datetime
 
 # Data directory
-DEFAULT_DIR = os.getcwd() + '/Dataset/'
+if 'Xun' in os.getcwd():
+    DEFAULT_DIR = os.getcwd() + '/Dataset/'
+else:
+    DEFAULT_DIR = os.getcwd()
 
 
 class DataHandler(object):

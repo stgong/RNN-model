@@ -1,0 +1,120 @@
+
+ks-cooks-1y -b 32 --max_length 60 --r_emb 100 --r_l 100 --progress 1000 --min_iter 10
+/usr/local/Cellar/python/3.7.2_2/bin/python3.7 
+/Users/xun/Documents/Thesis/RNN-model/train.py -d ks-cooks-1y -b 32 --max_length 60 --r_emb 100 --r_l 100 --progress 1000 --min_iter 10
+Console output is saving to: /Users/xun/Documents/Thesis/RNN-model/logs
+Using TensorFlow backend.
+2019-12-01 19:25:44.545349: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+WARNING:tensorflow:From /Users/xun/Library/Python/3.7/lib/python/site-packages/tensorflow/python/framework/op_def_library.py:263: colocate_with (from tensorflow.python.framework.ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Colocations handled automatically by placer.
+WARNING:tensorflow:From /Users/xun/Library/Python/3.7/lib/python/site-packages/tensorflow/python/ops/math_ops.py:3066: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.cast instead.
+Epoch 1/10
+Opening file (1)
+Opening file (1)
+Opening file (2)
+Opening file (3)
+Opening file (4)
+Opening file (5)
+Opening file (2)
+ - 61s - loss: 7.0327 - val_loss: 6.9431
+
+Epoch 00001: val_loss improved from inf to 6.94308, saving model to /Users/xun/Documents/Thesis/RNN-model/Dataset/ks-cooks-1y/models/rnn_cce_ml60_bs32_ne0.0_gc100_e100_h100_Ug_lr0.1_nt1.hdf5
+Epoch 2/10
+Opening file (6)
+Opening file (7)
+Opening file (8)
+Opening file (9)
+ - 59s - loss: 6.9441 - val_loss: 6.9625
+
+Epoch 00002: val_loss did not improve from 6.94308
+Epoch 3/10
+Opening file (10)
+Opening file (11)
+Opening file (12)
+Opening file (13)
+Opening file (3)
+ - 60s - loss: 6.9210 - val_loss: 6.9128
+
+Epoch 00003: val_loss improved from 6.94308 to 6.91280, saving model to /Users/xun/Documents/Thesis/RNN-model/Dataset/ks-cooks-1y/models/rnn_cce_ml60_bs32_ne0.0_gc100_e100_h100_Ug_lr0.1_nt1.hdf5
+Epoch 4/10
+Opening file (14)
+Opening file (15)
+Opening file (16)
+Opening file (17)
+Opening file (4)
+ - 61s - loss: 6.9064 - val_loss: 6.8702
+
+Epoch 00004: val_loss improved from 6.91280 to 6.87023, saving model to /Users/xun/Documents/Thesis/RNN-model/Dataset/ks-cooks-1y/models/rnn_cce_ml60_bs32_ne0.0_gc100_e100_h100_Ug_lr0.1_nt1.hdf5
+Epoch 5/10
+Opening file (18)
+Opening file (19)
+Opening file (20)
+Opening file (21)
+Opening file (22)
+ - 63s - loss: 6.9022 - val_loss: 6.9497
+
+Epoch 00005: val_loss did not improve from 6.87023
+Epoch 6/10
+Opening file (23)
+Opening file (24)
+Opening file (25)
+Opening file (26)
+Opening file (5)
+ - 63s - loss: 6.8836 - val_loss: 6.9144
+
+Epoch 00006: val_loss did not improve from 6.87023
+Epoch 7/10
+Opening file (27)
+Opening file (28)
+Opening file (29)
+Opening file (30)
+Opening file (6)
+ - 64s - loss: 6.8717 - val_loss: 6.9480
+
+Epoch 00007: val_loss did not improve from 6.87023
+Epoch 8/10
+Opening file (31)
+Opening file (32)
+Opening file (33)
+Opening file (34)
+ - 62s - loss: 6.8680 - val_loss: 6.9288
+
+Epoch 00008: val_loss did not improve from 6.87023
+Epoch 9/10
+Opening file (35)
+Opening file (36)
+Opening file (37)
+Opening file (38)
+Opening file (7)
+ - 61s - loss: 6.8537 - val_loss: 6.9409
+
+Epoch 00009: val_loss did not improve from 6.87023
+Epoch 10/10
+Opening file (39)
+Opening file (40)
+Opening file (41)
+Opening file (42)
+Opening file (43)
+Opening file (8)
+ - 62s - loss: 6.8403 - val_loss: 6.9668
+
+Epoch 00010: val_loss did not improve from 6.87023
+[7.032682466506958, 6.944105607032776, 6.920950249195099, 6.906351679325104, 6.9021561117172245, 6.883598434925079, 6.871729019165039, 6.867954409599304, 6.853682253360748, 6.840305661678314]
+Opening file (1)
+RNN with categorical cross entropy 0 batchs,  616.1675958633423  epochs in 621.3064181804657 s
+Last train cost :  6.902351589250564
+recall :  0.045806789335551996
+precision :  0.07360890302066801
+sps :  0.046104928457869634
+Best  sps :  0.046104928457869634
+user_coverage :  0.4753577106518283
+item_coverage :  13
+ndcg :  0.07581887422508495
+blockbuster_share :  0.9071274298056156
+-----------------
+Save model in /Users/xun/Documents/Thesis/RNN-model/Dataset/ks-cooks-1y/models/rnn_cce_ml60_bs32_ne616.168_gc100_e100_h100_Ug_lr0.1_nt1.hdf5
+
+Process finished with exit code 0
