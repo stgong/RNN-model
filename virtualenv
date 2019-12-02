@@ -4,8 +4,23 @@ virtual -p python3 remote_env
 
 
 source remote_env/bin/activate
+pip install -r requirements.txt
 
-pip install jupyter
-pip install ipykernel
+# or two commands in one line
+source remote_env/bin/activate &&\
+pip install -r requirements.txt
 
-git rm --cached remote/RNN-model
+
+jupyter notebook
+
+# pip install jupyter
+# pip install ipykernel
+
+
+
+git remote set-url origin "https://stgong:Pass19911031%21@github.com/stgong/RNN-model.git"
+
+git push -u origin master
+
+pip freeze > requirements.txt
+
