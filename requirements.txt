@@ -163,7 +163,7 @@ python-subunit==1.2.0
 python-xlib==0.20
 PyTrie==0.2
 pytz==2018.3
-pyxdg==0.25
+pyxdg==0.26
 PyYAML==3.12
 pyzmq==17.1.2
 qrcode==5.3
