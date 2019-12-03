@@ -6,6 +6,7 @@ import os.path
 import os
 import datetime
 
+
 # Data directory
 if 'xun' in os.getcwd():
     DEFAULT_DIR = os.getcwd() + '/Dataset'

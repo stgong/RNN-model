@@ -1,75 +1,10 @@
 Using TensorFlow backend.
-2019-12-02 16:26:28.939035: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2019-12-03 19:46:49.022041: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
 WARNING:tensorflow:From /Users/xun/Library/Python/3.7/lib/python/site-packages/tensorflow/python/framework/op_def_library.py:263: colocate_with (from tensorflow.python.framework.ops) is deprecated and will be removed in a future version.
 Instructions for updating:
 Colocations handled automatically by placer.
 WARNING:tensorflow:From /Users/xun/Library/Python/3.7/lib/python/site-packages/tensorflow/python/ops/math_ops.py:3066: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
 Instructions for updating:
 Use tf.cast instead.
-Epoch 1/10
-Opening file (1)
-Opening file (1)
-Opening file (2)
- - 7s - loss: 7.3650 - val_loss: 7.0766
-
-Epoch 00001: val_loss improved from inf to 7.07664, saving model to ks-cooks-1y/models/rnn_cce_ml60_bs32_ne0.0_gc100_e100_h100_Ug_lr0.1_nt1.hdf5
-Epoch 2/10
- - 6s - loss: 7.0849 - val_loss: 7.0319
-
-Epoch 00002: val_loss improved from 7.07664 to 7.03188, saving model to ks-cooks-1y/models/rnn_cce_ml60_bs32_ne0.0_gc100_e100_h100_Ug_lr0.1_nt1.hdf5
-Epoch 3/10
-Opening file (2)
-Opening file (3)
- - 6s - loss: 7.0784 - val_loss: 7.0365
-
-Epoch 00003: val_loss did not improve from 7.03188
-Epoch 4/10
-Opening file (4)
- - 6s - loss: 7.0218 - val_loss: 7.0241
-
-Epoch 00004: val_loss improved from 7.03188 to 7.02410, saving model to ks-cooks-1y/models/rnn_cce_ml60_bs32_ne0.0_gc100_e100_h100_Ug_lr0.1_nt1.hdf5
-Epoch 5/10
-Opening file (3)
- - 7s - loss: 6.9958 - val_loss: 6.9307
-
-Epoch 00005: val_loss improved from 7.02410 to 6.93065, saving model to ks-cooks-1y/models/rnn_cce_ml60_bs32_ne0.0_gc100_e100_h100_Ug_lr0.1_nt1.hdf5
-Epoch 6/10
-Opening file (5)
- - 7s - loss: 6.9825 - val_loss: 6.9516
-
-Epoch 00006: val_loss did not improve from 6.93065
-Epoch 7/10
-Opening file (4)
-Opening file (6)
- - 7s - loss: 7.0232 - val_loss: 6.9431
-
-Epoch 00007: val_loss did not improve from 6.93065
-Epoch 8/10
- - 7s - loss: 6.9774 - val_loss: 6.9508
-
-Epoch 00008: val_loss did not improve from 6.93065
-Epoch 9/10
-Opening file (7)
- - 7s - loss: 6.9712 - val_loss: 7.0287
-
-Epoch 00009: val_loss did not improve from 6.93065
-Epoch 10/10
-Opening file (5)
-Opening file (8)
- - 7s - loss: 6.9984 - val_loss: 6.9707
-
-Epoch 00010: val_loss did not improve from 6.93065
-[7.36497220993042, 7.084879808425903, 7.078432168960571, 7.021848440170288, 6.99583872795105, 6.982480916976929, 7.023216071128846, 6.977434935569764, 6.971159772872925, 6.998354525566101]
-Opening file (1)
-RNN with categorical cross entropy 0 batchs,  67.56371402740479  epochs in 73.11774396896362 s
-Last train cost :  7.049861757755279
-recall :  0.04655318278953739
-precision :  0.07503974562798124
-sps :  0.04451510333863275
-Best  sps :  0.04451510333863275
-user_coverage :  0.4848966613672496
-item_coverage :  10
-ndcg :  0.07527661395756668
-blockbuster_share :  0.8983050847457628
------------------
-Save model in ks-cooks-1y/models/rnn_cce_ml60_bs32_ne67.564_gc100_e100_h100_Ug_lr0.1_nt1.hdf5
+Train on 177316 samples, validate on 629 samples
+Epoch 1/1

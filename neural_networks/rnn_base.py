@@ -62,6 +62,8 @@ class RNNBase(object):
                         'blockbuster_share': {'direction': -1}
                         }
 
+
+
     def _common_filename(self, epochs):
         '''Common parts of the filename across sub classes.
 		'''
@@ -150,8 +152,8 @@ class RNNBase(object):
         if load_last_model:
             epochs_offset = self.load_last(save_dir)
 
-        batch_generator = self._gen_mini_batch(self.sequence_noise(self.dataset.training_set()))
-        val_generator = self._gen_mini_batch(self.sequence_noise(self.dataset.validation_set()))
+        X, Y = self._gen_mini_batch(self.dataset.dirname)
+        x_val, y_val = self._gen_mini_batch(self.dataset.dirname, test=True)
 
         start_time = time()
         next_save = int(progress)
@@ -169,8 +171,14 @@ class RNNBase(object):
             checkpoint = ModelCheckpoint(filepath, verbose=1,
                                          monitor='val_loss', save_best_only=True, mode='auto')
 
-            history = self.model.fit_generator(batch_generator, epochs = min_iterations, steps_per_epoch= progress,
-                                            validation_data = val_generator, validation_steps=20,
+            # history = self.model.fit_generator(batch_generator, epochs = min_iterations, steps_per_epoch= progress,
+            #                                 validation_data = val_generator, validation_steps=20,
+            #                                 # workers = 1, use_multiprocessing = True,
+            #                                    callbacks= [checkpoint],
+            #                                    verbose=2)
+
+            history = self.model.fit(X,Y, epochs = min_iterations, batch_size = self.batch_size,
+                                            validation_data = (x_val, y_val),
                                             # workers = 1, use_multiprocessing = True,
                                                callbacks= [checkpoint],
                                                verbose=2)
@@ -254,69 +262,52 @@ class RNNBase(object):
     #             j += 1
     #         yield self._prepare_input(sequences)
 
+    def _gen_mini_batch(self, dirname, test=False):
 
-    def _gen_mini_batch(self, sequence_generator, test=False):
-        ''' Takes a sequence generator and produce a mini batch generator.
-		The mini batch have a size defined by self.batch_size, and have format of the input layer of the rnn.
+        # while True:
+        #     j = 0
+        #     sequences = []
+        #     batch_size = self.batch_size
+        #     if test:
+        #         batch_size = 1
+        #     #     sequences = sequence_val_all
+        #
+        #     while j < batch_size:  # j : user order
+        #     #
+        #         if not test:
+        #             sequence = next(self.batch_generator(dirname))
+        #         else:
+        #             sequence = next(self.batch_generator(dirname), test = True)
+        #     #     if not test:
+        #     #     sequences.append(sequence)
+        #     #     else:
+        #     #         sequences = sequence_val_all
+        #     # else:
+        #     #     sequences = sequence_train_all[j:j+batch_size]
+        #     # sequences.append([user_id, sequence[start:start + l], target])
+        #     # print([user_id, sequence[start:l], target])
+        #     j += 1
+        sequence_train_all = np.load(dirname + '/data/sub_sequences_all_list.pickle', allow_pickle=True)
+        sequence_val_all = np.load(dirname + '/data/validation_all_list.pickle', allow_pickle=True)
+        if not test:
+            return self._prepare_input(sequence_train_all)
+        else:
+            return self._prepare_input(sequence_val_all)
+            # print('mini_generator yielded a batch %d' % i)
+            # i += 1
 
-		test determines how the sequence is splitted between training and testing
-			test == False, the sequence is split randomly
-			test == True, the sequence is split in the middle
-
-		if test == False, max_reuse_sequence determines how many time a single sequence is used in the same batch.
-			with max_reuse_sequence = inf, one sequence will be used to make the whole batch (if the sequence is long enough)
-			with max_reuse_sequence = 1, each sequence is used only once in the batch
-		N.B. if test == True, max_reuse_sequence = 1 is used anyway
-		'''
-        init = 0
-        # print('%d mini_batch_generator initiated' % init)
-        init +=1
-        i = 0
-        uid = []
-        while True:
-            j = 0
-            sequences = []
-            batch_size = self.batch_size
-            if test:
-                batch_size = 1
-            while j < batch_size:  # j : user order
-
-                sequence, user_id = next(sequence_generator)
-                uid.append(user_id)
-
-                # finds the lengths of the different subsequences
-                if not test:  # training set
-                    # seq_lengths = sorted(
-                    #     random.sample(range(2, len(sequence)),  # range
-                    #                   min([self.batch_size - j, len(sequence) - 2]))  # population
-                    # )
-                    seq_lengths = sorted(
-                        random.sample(range(2, len(sequence)),  # min_length = 2
-                                      min([self.batch_size - j, len(sequence) - 2, len(sequence) // 10]))
-                    )
-                    # print('called sequence generator', 'j =', j, 'user_id:', user_id,'seq_len=',len(sequence), 'seq_lengths =',len(seq_lengths))
-                elif self.iter:
-                    batch_size = len(sequence) - 1
-                    seq_lengths = list(range(1, len(sequence)))
-                else:  # validating set
-                    seq_lengths = [int(len(sequence)-1)]  # validation set take the whole sequence, last item as target
-
-                skipped_seq = 0
-                for l in seq_lengths:
-                    l = min(self.max_length, l)
-                    start = np.random.randint(0, len(sequence))  # randomly choose a start position
-                    start = min(start, len(sequence) - l)
-                    target = self.target_selection(sequence[start + l:], test=test)
-                    if len(target) == 0:
-                        skipped_seq += 1
-                        continue
-                    sequences.append([user_id, sequence[start:start + l], target])
-                # print([user_id, sequence[start:l], target])
-
-                j += len(seq_lengths) - skipped_seq
-            yield self._prepare_input(sequences)
-                    # print('mini_generator yielded a batch %d' % i)
-                    # i += 1
+    # def batch_generator(self, dirname, test=False):
+    #     for j in sequence_train_all:
+    #         j = 0
+    #         sequences = []
+    #         batch_size = self.batch_size
+    #
+    #         if not test:
+    #             sequences = sequence_train_all[j*batch_size: (j+1)*batch_size]
+    #         else:
+    #             sequences = sequence_val_all
+    #         j += 1
+    #         yield sequences
 
     def _print_progress(self, iterations, epochs, start_time, train_costs
                         , metrics
