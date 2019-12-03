@@ -130,8 +130,9 @@ A diversity_bias of 0 produces the normal behavior, with no bias.
                 X[i, :len(in_seq), :] = seq_features  # Copy sequences into X
 
             # Becareful, target is a list of multiple target tuples before
-            Y[i][target[0][0]] = 1.
-            # Y[i][target[0]] = 1.
+            # Using preprocessed sub-sequences, need to user Y[i][target[0]] = 1.
+            # Y[i][target[0][0]] = 1.
+            Y[i][target[0]] = 1.
 
         return X, Y
 
