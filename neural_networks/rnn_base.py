@@ -180,7 +180,7 @@ class RNNBase(object):
                                             validation_steps=len(val_subseq_list)//batch_size,
                                             workers = 4, use_multiprocessing = True,
                                                callbacks= [checkpoint],
-                                               verbose=2)
+                                               verbose=1)
             cost = history.history['loss']
             # print(cost)
             current_train_cost = cost
@@ -246,6 +246,7 @@ class RNNBase(object):
             # print(counter)
             counter += 1
             yield self._prepare_input(sequences)
+            print('generator yielded a batch %d' % counter)
 
             # restart counter to yeild data in the next epoch as well
             if counter >= number_of_batches:
