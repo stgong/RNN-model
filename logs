@@ -1,7 +1,5 @@
-pydev debugger: process 86435 is connecting
-
 Using TensorFlow backend.
-2019-12-03 22:19:53.759846: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2019-12-04 10:45:19.613215: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
 WARNING:tensorflow:From /Users/xun/Library/Python/3.7/lib/python/site-packages/tensorflow/python/framework/op_def_library.py:263: colocate_with (from tensorflow.python.framework.ops) is deprecated and will be removed in a future version.
 Instructions for updating:
 Colocations handled automatically by placer.
@@ -9,3 +7,19 @@ WARNING:tensorflow:From /Users/xun/Library/Python/3.7/lib/python/site-packages/t
 Instructions for updating:
 Use tf.cast instead.
 Epoch 1/1
+ - 1s - loss: 2.0098 - val_loss: 16.0927
+
+Epoch 00001: val_loss improved from inf to 16.09272, saving model to ks-cooks-1y/models/rnn_cce_ml60_bs2_ne0.614_gc100_e100_h100_Ug_lr0.1_nt1.hdf5
+Opening file (1)
+RNN with categorical cross entropy 0 batchs,  2.0343339443206787  epochs in 7.0495922565460205 s
+Last train cost :  2.0098418593406677
+recall :  0.007478224713900262
+precision :  0.012559618441971367
+sps :  0.009538950715421303
+Best  sps :  0.009538950715421303
+user_coverage :  0.11605723370429252
+item_coverage :  8
+ndcg :  0.012747983768015883
+blockbuster_share :  0.0
+-----------------
+Save model in ks-cooks-1y/models/rnn_cce_ml60_bs2_ne2.034_gc100_e100_h100_Ug_lr0.1_nt1.hdf5
