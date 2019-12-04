@@ -128,18 +128,19 @@ class RNNBase(object):
 
     def train(self, dataset,
               max_time=np.inf,
-              number_of_batches=5000,
+              number_of_batches=10,
               autosave='Best',
               save_dir='',
               epochs=10,
               max_iter=4,
               early_stopping=None,
-              validation_metrics=['sps']):
+              validation_metrics=['sps'],
+              debug = False):
 
         start_time = time()
         self.dataset = dataset
         batch_size = self.batch_size
-        self.number_of_batches = number_of_batches
+
 
         self.target_selection.set_dataset(dataset)
 
@@ -160,7 +161,10 @@ class RNNBase(object):
         current_train_cost = []
         metrics = {name: [] for name in self.metrics.keys()}
         filename = {}
-
+        if debug:
+            number_of_batches_input = number_of_batches
+        else:
+            number_of_batches_input = len(train_subseq_list) // self.batch_size
         try:
 
             ne = '{epoch:03d}'
@@ -170,7 +174,7 @@ class RNNBase(object):
             checkpoint = ModelCheckpoint(filepath,
                                          verbose=1,
                                          monitor='val_loss', save_best_only=True, mode='auto')
-            history = self.model.fit_generator(batch_generator, epochs = epochs, steps_per_epoch= number_of_batches,
+            history = self.model.fit_generator(batch_generator, epochs=epochs, steps_per_epoch=number_of_batches_input,
                                             validation_data = val_generator,
                                             # validation_steps=1,
                                             validation_steps=len(val_subseq_list)//batch_size,
@@ -199,7 +203,7 @@ class RNNBase(object):
             metrics = self._compute_validation_metrics(self.dataset, metrics)
 
             # Print info
-            self._print_progress(number_of_batches, epochs, start_time, train_costs
+            self._print_progress(number_of_batches_input, epochs, start_time, train_costs
                                  , metrics, validation_metrics
                                  )
             # Save model
@@ -233,7 +237,7 @@ class RNNBase(object):
     def generator(self, dataset):
 
         samples_per_epoch = len(dataset)
-        number_of_batches = self.number_of_batches
+        number_of_batches = samples_per_epoch// self.batch_size
         counter = 0
         batch_size = self.batch_size
         while True:

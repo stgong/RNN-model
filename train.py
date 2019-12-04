@@ -19,7 +19,7 @@ def training_command_parser(parser):
 	parser.add_argument('--number_of_batches', help='number_of_batches', default='5000', type=str)
 	parser.add_argument('--mpi', help='Max progress intervals', default=50000, type=int)
 	parser.add_argument('--max_iter', help='Max number of iterations', default=10, type=int)
-	parser.add_argument('--max_time', help='Max training time in seconds', default=np.inf, type=float)
+	parser.add_argument('--debug', help='Max training time in seconds', default= False, type=bool)
 	parser.add_argument('--epochs', help='number of epochs', default=10, type=int) # 10 epoch for ml1m
 
 
@@ -44,7 +44,8 @@ def main():
 		save_dir=dataset.dirname + "/models/" + args.dir,
 		epochs=args.epochs,
 		early_stopping=EsParse.get_early_stopper(args),
-	    validation_metrics = args.metrics.split(','))
+	    validation_metrics = args.metrics.split(','),
+					debug = args.debug)
 
 
 if __name__ == '__main__':
