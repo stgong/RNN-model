@@ -36,9 +36,9 @@ class RecurrentLayers(object):
 		elif self.layer_type != "LSTM":
 			self.name += self.layer_type+"_"
 
-		self.name += "gc"+str(self.grad_clip)+"_"
+		self.name += "_"
 		if self.embedding_size > 0:
-			self.name += "e"+str(self.embedding_size) + "_"
+			self.name += "emb"+str(self.embedding_size) + "_"
 			if self.no_td :
 				self.name += "ntd_"
 			if self.no_wt:

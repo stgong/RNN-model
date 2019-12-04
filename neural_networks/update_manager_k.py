@@ -24,7 +24,7 @@ class Adagrad(object):
 		super(Adagrad, self).__init__(**kwargs)
 
 		self.learning_rate = learning_rate
-		self.name = 'Ug_lr' + str(self.learning_rate)
+		self.name = 'Adagrad_lr' + str(self.learning_rate)
 
 	def __call__(self):
 		return optimizers.Adagrad(lr=self.learning_rate)
@@ -36,7 +36,7 @@ class Adadelta(object):
 
 		self.learning_rate = learning_rate
 		self.rho = rho
-		self.name = 'Ud_lr' + str(self.learning_rate) + '_rho' + str(self.rho)
+		self.name = 'Adadelta_lr' + str(self.learning_rate) + '_rho' + str(self.rho)
 
 	def __call__(self):
 		return optimizers.Adadelta()
@@ -48,7 +48,7 @@ class RMSProp(object):
 
 		self.learning_rate = learning_rate
 		self.rho = rho
-		self.name = 'Ur_lr' + str(self.learning_rate) + '_rho' + str(self.rho)
+		self.name = 'RMSProp_lr' + str(self.learning_rate) + '_rho' + str(self.rho)
 
 	def __call__(self):
 		return optimizers.RMSprop()
@@ -60,7 +60,7 @@ class Adam(object):
 		self.learning_rate = learning_rate
 		self.beta1 = beta1
 		self.beta2 = beta2
-		self.name = 'Ua_lr' + str(self.learning_rate) + '_b1' + str(self.beta1) + '_b2' + str(self.beta2)
+		self.name = 'Adam_lr' + str(self.learning_rate) + '_b1' + str(self.beta1) + '_b2' + str(self.beta2)
 
 	def __call__(self):
 		return optimizers.Adam()

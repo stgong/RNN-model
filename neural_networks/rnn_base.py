@@ -64,11 +64,11 @@ class RNNBase(object):
 
 
 
-    def _common_filename(self, epochs):
+    def _common_filename(self, epochs, true_epochs):
         '''Common parts of the filename across sub classes.
 		'''
-        filename = "ml" + str(self.max_length) + "_bs" + str(self.batch_size) + "_ne" + str(
-            epochs) + "_" + self.recurrent_layer.name + "_" + self.updater.name + "_" + self.target_selection.name
+        filename = "ml" + str(self.max_length) + "_bs" + str(self.batch_size) + self.recurrent_layer.name + "_" + self.updater.name + "_" + self.target_selection.name + "_epoch"\
+                   + str(true_epochs) + "_i" + str(epochs)
 
         if self.sequence_noise.name != "":
             filename += "_" + self.sequence_noise.name
@@ -161,12 +161,9 @@ class RNNBase(object):
 
         try:
 
-            ne = '{epoch:3.1f}'
-            # file = self._get_model_filename(
-            #     round(float(ne), 3))
-            print(ne)
+            ne = '{epoch:03d}'
             filepath = save_dir + self._get_model_filename(
-                round(time() - start_time, 3))
+                round(time() - start_time, 3),'{epoch:03d}')
 
             checkpoint = ModelCheckpoint(filepath,
                                          verbose=1,
@@ -206,13 +203,13 @@ class RNNBase(object):
             run_nb = len(train_costs) - 1
             if autosave == 'All':
                 filename[run_nb] = save_dir + self._get_model_filename(
-                    round(epochs[-1], 3))
+                    round(epochs[-1], 3), min_iterations)
                 self._save(filename[run_nb])
             elif autosave == 'Best':
                 pareto_runs = self.get_pareto_front(metrics, validation_metrics)
                 if run_nb in pareto_runs:
                     filename[run_nb] = save_dir + self._get_model_filename(
-                        round(epochs[-1], 3))
+                        round(epochs[-1], 3), min_iterations)
                     self._save(filename[run_nb])
                     to_delete = [r for r in filename if r not in pareto_runs]
                     for run in to_delete:

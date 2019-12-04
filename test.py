@@ -16,7 +16,7 @@ from helpers.data_handling import DataHandler
 def get_file_name(predictor, args):
     return args.dir + re.sub('_ml' + str(args.max_length),
                                                          '_ml' + str(args.training_max_length),
-                                                         predictor._get_model_filename(args.number_of_batches))# + str(args.best_epoch)
+                                                         predictor._get_model_filename(args.number_of_batches, args.epoch))# + str(args.best_epoch)
 
 
 def find_models(predictor, dataset, args):
@@ -127,6 +127,9 @@ def test_command_parser(parser):
     parser.add_argument('-i', dest='number_of_batches',
                         help='Number of epochs, if not set it will compare all the available models', default=-1,
                         type=float)
+    parser.add_argument('-e', dest='epoch',
+                        help='index of epochs', default=-1,
+                        type=str)
     # parser.add_argument('-be', dest='best_epoch',help='best epochs', default='10',type=str)
     parser.add_argument('-k', dest='nb_of_predictions',
                         help='Number of predictions to make. It is the "k" in "prec@k", "rec@k", etc.', default=10,

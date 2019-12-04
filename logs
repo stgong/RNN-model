@@ -1,26 +1,25 @@
 Using TensorFlow backend.
-2019-12-04 11:36:31.220669: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2019-12-04 12:09:33.573826: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
 WARNING:tensorflow:From /Users/xun/Library/Python/3.7/lib/python/site-packages/tensorflow/python/framework/op_def_library.py:263: colocate_with (from tensorflow.python.framework.ops) is deprecated and will be removed in a future version.
 Instructions for updating:
 Colocations handled automatically by placer.
-{epoch:3.1f}
 WARNING:tensorflow:From /Users/xun/Library/Python/3.7/lib/python/site-packages/tensorflow/python/ops/math_ops.py:3066: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
 Instructions for updating:
 Use tf.cast instead.
 Epoch 1/1
- - 1s - loss: 2.2354 - val_loss: 16.1181
+ - 1s - loss: 2.0016 - val_loss: 15.2829
 
-Epoch 00001: val_loss improved from inf to 16.11810, saving model to ks-cooks-1y/models/rnn_cce_ml60_bs2_ne0.65_gc100_e100_h100_Ug_lr0.1_nt1.hdf5
+Epoch 00001: val_loss improved from inf to 15.28294, saving model to ks-cooks-1y/models/rnn_cce_ml60_bs2_emb100_h100_Adagrad_lr0.1_nt1_epoch001_i0.683.hdf5
 Opening file (1)
-RNN with categorical cross entropy 10 batchs,  1  epochs in 7.8854310512542725 s
-Last train cost :  2.235389369726181
-recall :  0.007265055808838914
-precision :  0.012718600953895057
+RNN with categorical cross entropy 10 batchs,  1  epochs in 7.681128978729248 s
+Last train cost :  2.001637065410614
+recall :  0.008341107446205686
+precision :  0.014149443561208248
 sps :  0.003179650238473768
 Best  sps :  0.003179650238473768
-user_coverage :  0.11605723370429252
-item_coverage :  9
-ndcg :  0.012281558076489037
+user_coverage :  0.13195548489666137
+item_coverage :  8
+ndcg :  0.014127148307266482
 blockbuster_share :  0.0
 -----------------
-Save model in ks-cooks-1y/models/rnn_cce_ml60_bs2_ne2.684_gc100_e100_h100_Ug_lr0.1_nt1.hdf5
+Save model in ks-cooks-1y/models/rnn_cce_ml60_bs2_emb100_h100_Adagrad_lr0.1_nt1_epoch1_i2.714.hdf5
