@@ -11,12 +11,13 @@ from time import time
 import numpy as np
 import pickle
 
+
+from keras.utils import Sequence
 from .sequence_noise import SequenceNoise
 from .target_selection import SelectTargets
-from keras.models import Sequential, load_model, Model
-from keras import callbacks
 from keras.callbacks import ModelCheckpoint
-from helpers import evaluation
+
+# from helpers.data_generator import DataGenerator
 
 
 class RNNBase(object):
@@ -151,10 +152,6 @@ class RNNBase(object):
         train_subseq_list = np.load(self.dataset.dirname + '/data/train_subseq_list.pickle', allow_pickle=True)
         val_subseq_list = np.load(self.dataset.dirname + '/data/validation_subseq_list.pickle', allow_pickle=True)
 
-
-        batch_generator = self.generator(train_subseq_list)
-        val_generator = self.generator(val_subseq_list)
-
         iterations = 0
         # val_costs = []
         train_costs = []
@@ -174,13 +171,20 @@ class RNNBase(object):
             checkpoint = ModelCheckpoint(filepath,
                                          verbose=1,
                                          monitor='val_loss', save_best_only=True, mode='auto')
-            history = self.model.fit_generator(batch_generator, epochs=epochs, steps_per_epoch=number_of_batches_input,
-                                            validation_data = val_generator,
+
+
+            batch_generator = DataGenerator(train_subseq_list, self.recurrent_layer.embedding_size, self.max_length, self._input_size())
+            val_generator = DataGenerator(val_subseq_list, self.recurrent_layer.embedding_size, self.max_length, self._input_size())
+
+
+            history = self.model.fit_generator(batch_generator,
+                                            # steps_per_epoch=number_of_batches_input,
+                                            validation_data=val_generator,
                                             # validation_steps=1,
-                                            validation_steps=len(val_subseq_list)//batch_size,
+                                            # validation_steps=len(val_subseq_list)//batch_size,
                                             workers = 4, use_multiprocessing = True,
                                                callbacks= [checkpoint],
-                                               verbose=2)
+                                               verbose=1)
             cost = history.history['loss']
             # print(cost)
             current_train_cost = cost
@@ -289,3 +293,84 @@ class RNNBase(object):
         one_hot_encoding = np.zeros(self.n_items)
         one_hot_encoding[item[0]] = 1
         return one_hot_encoding
+
+class DataGenerator(Sequence):
+    'Generates data for Keras'
+    def __init__(self, list, emb, max_length, n_items, batch_size=32):
+        'Initialization'
+        self.batch_size = batch_size
+        self.list = list
+        self.on_epoch_end()
+        self.emb = emb
+        self.max_length = max_length
+        self.n_items = n_items
+        self._input_type = 'float32'
+
+    def __len__(self):
+        'Denotes the number of batches per epoch'
+        return int(np.floor(len(self.list) / self.batch_size))
+
+    def __getitem__(self, index):
+        'Generate one batch of data'
+        # Generate indexes of the batch
+        indexes = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
+        # print(indexes)
+        # Find list of IDs
+        list_temp = [self.list[k] for k in indexes]
+
+        # Generate data
+        sequences = self.__data_generation(list_temp)
+
+        return sequences
+
+    def on_epoch_end(self):
+        'Updates indexes after each epoch'
+        self.indexes = np.arange(len(self.list))
+
+    def _get_features(self, item):
+        '''Change a tuple (item_id, rating) into a list of features to feed into the RNN
+        features have the following structure: [one_hot_encoding, personal_rating on a scale of ten, average_rating on a scale of ten, popularity on a log scale of ten]
+        '''
+
+        one_hot_encoding = np.zeros(self.n_items)
+        one_hot_encoding[item[0]] = 1
+        return one_hot_encoding
+    def _prepare_input(self, sequences):
+        """ Sequences is a list of [user_id, input_sequence, targets]
+        """
+        # print("_prepare_input()")
+        batch_size = len(sequences)
+
+        # Shape of return variables
+        if self.emb > 0:
+            X = np.zeros((batch_size, self.max_length),
+                         dtype=self._input_type)  # keras embedding requires movie-id sequence, not one-hot
+        else:
+            X = np.zeros((batch_size, self.max_length, self.n_items), dtype=self._input_type)  # input of the RNN
+        Y = np.zeros((batch_size, self.n_items), dtype='float32')  # output target
+
+        for i, sequence in enumerate(sequences):
+            user_id, in_seq, target = sequence
+
+            if self.emb > 0:
+                X[i, :len(in_seq)] = np.array([item[0] for item in in_seq])
+            else:
+                seq_features = np.array(list(map(lambda x: self._get_features(x), in_seq)))
+                X[i, :len(in_seq), :] = seq_features  # Copy sequences into X
+
+            # Becareful, target is a list of multiple target tuples before
+            # Using preprocessed sub-sequences, need to user Y[i][target[0]] = 1.
+            # Y[i][target[0][0]] = 1.
+            Y[i][target[0]] = 1.
+
+        return X, Y
+
+    def __data_generation(self, list_temp):
+        'Generates data containing batch_size samples' # X : (n_samples, *dim, n_channels)
+        # Initialization
+        sequences = []
+
+        # Generate data
+        for subseq in list_temp:
+            sequences.append(subseq)
+        return self._prepare_input(sequences)
