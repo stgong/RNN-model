@@ -64,11 +64,11 @@ class RNNBase(object):
 
 
 
-    def _common_filename(self, epochs, true_epochs):
+    def _common_filename(self, version, true_epochs):
         '''Common parts of the filename across sub classes.
 		'''
         filename = "ml" + str(self.max_length) + "_bs" + str(self.batch_size) + self.recurrent_layer.name + "_" + self.updater.name + "_" + self.target_selection.name + "_epoch"\
-                   + str(true_epochs) + "_i" + str(epochs)
+                   + str(true_epochs) + "_i" + str(version)
 
         if self.sequence_noise.name != "":
             filename += "_" + self.sequence_noise.name
@@ -128,10 +128,10 @@ class RNNBase(object):
 
     def train(self, dataset,
               max_time=np.inf,
-              progress=5000,
+              number_of_batches=5000,
               autosave='Best',
               save_dir='',
-              min_iterations=0,
+              epochs=10,
               max_iter=4,
               early_stopping=None,
               validation_metrics=['sps']):
@@ -168,7 +168,7 @@ class RNNBase(object):
             checkpoint = ModelCheckpoint(filepath,
                                          verbose=1,
                                          monitor='val_loss', save_best_only=True, mode='auto')
-            history = self.model.fit_generator(batch_generator, epochs = min_iterations, steps_per_epoch= progress,
+            history = self.model.fit_generator(batch_generator, epochs = epochs, steps_per_epoch= number_of_batches,
                                             validation_data = val_generator, validation_steps=1,
                                             # validation_steps=len(val_subseq_list)//batch_size,
                                             # workers = 1, use_multiprocessing = True,
@@ -180,7 +180,7 @@ class RNNBase(object):
             # print(current_train_cost)
 
             # Check if it is time to save the model
-            epochs=[time()-start_time]
+            version=[time()-start_time]
 
             # Average train cost
             train_costs.append(np.mean(current_train_cost))
@@ -196,20 +196,20 @@ class RNNBase(object):
             metrics = self._compute_validation_metrics(self.dataset, metrics)
 
             # Print info
-            self._print_progress(progress, min_iterations, start_time, train_costs
+            self._print_progress(number_of_batches, epochs, start_time, train_costs
                                  , metrics, validation_metrics
                                  )
             # Save model
             run_nb = len(train_costs) - 1
             if autosave == 'All':
                 filename[run_nb] = save_dir + self._get_model_filename(
-                    round(epochs[-1], 3), min_iterations)
+                    round(version[-1], 3), epochs)
                 self._save(filename[run_nb])
             elif autosave == 'Best':
                 pareto_runs = self.get_pareto_front(metrics, validation_metrics)
                 if run_nb in pareto_runs:
                     filename[run_nb] = save_dir + self._get_model_filename(
-                        round(epochs[-1], 3), min_iterations)
+                        round(version[-1], 3), epochs)
                     self._save(filename[run_nb])
                     to_delete = [r for r in filename if r not in pareto_runs]
                     for run in to_delete:
