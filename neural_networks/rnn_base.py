@@ -178,7 +178,7 @@ class RNNBase(object):
                                             validation_data = val_generator,
                                             # validation_steps=1,
                                             validation_steps=len(val_subseq_list)//batch_size,
-                                            # workers = 1, use_multiprocessing = True,
+                                            workers = 4, use_multiprocessing = True,
                                                callbacks= [checkpoint],
                                                verbose=2)
             cost = history.history['loss']
