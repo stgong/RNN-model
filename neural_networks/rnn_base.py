@@ -139,6 +139,7 @@ class RNNBase(object):
         start_time = time()
         self.dataset = dataset
         batch_size = self.batch_size
+        self.number_of_batches = number_of_batches
 
         self.target_selection.set_dataset(dataset)
 
@@ -149,8 +150,9 @@ class RNNBase(object):
         train_subseq_list = np.load(self.dataset.dirname + '/data/train_subseq_list.pickle', allow_pickle=True)
         val_subseq_list = np.load(self.dataset.dirname + '/data/validation_subseq_list.pickle', allow_pickle=True)
 
-        batch_generator = self._gen_mini_batch(train_subseq_list)
-        val_generator = self._gen_mini_batch(val_subseq_list)
+
+        batch_generator = self.generator(train_subseq_list)
+        val_generator = self.generator(val_subseq_list)
 
         iterations = 0
         # val_costs = []
@@ -169,8 +171,9 @@ class RNNBase(object):
                                          verbose=1,
                                          monitor='val_loss', save_best_only=True, mode='auto')
             history = self.model.fit_generator(batch_generator, epochs = epochs, steps_per_epoch= number_of_batches,
-                                            validation_data = val_generator, validation_steps=1,
-                                            # validation_steps=len(val_subseq_list)//batch_size,
+                                            validation_data = val_generator,
+                                            # validation_steps=1,
+                                            validation_steps=len(val_subseq_list)//batch_size,
                                             # workers = 1, use_multiprocessing = True,
                                                callbacks= [checkpoint],
                                                verbose=2)
@@ -227,28 +230,23 @@ class RNNBase(object):
         return ({m: metrics[m][best_run] for m in self.metrics.keys()}, time() - start_time, filename[best_run])
 
 
-    def _gen_mini_batch(self,dataset,test=False):
+    def generator(self, dataset):
 
+        samples_per_epoch = len(dataset)
+        number_of_batches = self.number_of_batches
+        counter = 0
+        batch_size = self.batch_size
         while True:
-            j=0
-            sequences = []
-            batch_size = self.batch_size
-            if test:
-                batch_size = len(dataset)
 
-            sub_sequence = self.batch_generator(dataset)
-            while j < batch_size:
-                sequence = next(sub_sequence)
-                sequences.append(sequence)
-                j +=1
+            sequences = dataset[batch_size * counter:batch_size * (counter + 1)]
+            # print(counter)
+            counter += 1
             yield self._prepare_input(sequences)
 
+            # restart counter to yeild data in the next epoch as well
+            if counter >= number_of_batches:
+                counter = 0
 
-    def batch_generator(self, dataset, test=False):
-        j = 0
-        while True:
-            yield dataset[j]
-            j += 1
 
     def _print_progress(self, iterations, epochs, start_time, train_costs
                         , metrics
