@@ -45,11 +45,11 @@ A diversity_bias of 0 produces the normal behavior, with no bias.
             reload(be)
             assert be.backend() == backend
 
-    def _get_model_filename(self, epochs):
+    def _get_model_filename(self, epochs, true_epochs):
         """Return the name of the file to save the current model
         """
         # filename = "rnn_cce_db"+str(self.diversity_bias)+"_r"+str(self.regularization)+"_"+self._common_filename(epochs)
-        filename = "rnn_cce_" + self._common_filename(epochs) + ".hdf5"
+        filename = "rnn_cce_" + self._common_filename(epochs,true_epochs) + ".hdf5"
         return filename
 
     def prepare_networks(self, n_items):

@@ -16,11 +16,11 @@ def training_command_parser(parser):
 	parser.add_argument('--save', choices=['All', 'Best', 'None'], help='Policy for saving models.', default='Best')
 	parser.add_argument('--metrics', help='Metrics for validation, comma separated', default='sps', type=str)
 	parser.add_argument('--load_last_model', help='Load Last model before starting training.', action='store_true')
-	parser.add_argument('--progress', help='Progress intervals', default='5000', type=str)
+	parser.add_argument('--number_of_batches', help='number_of_batches', default='5000', type=str)
 	parser.add_argument('--mpi', help='Max progress intervals', default=50000, type=int)
 	parser.add_argument('--max_iter', help='Max number of iterations', default=10, type=int)
 	parser.add_argument('--max_time', help='Max training time in seconds', default=np.inf, type=float)
-	parser.add_argument('--min_iter', help='Min number of iterations before showing progress', default=10, type=int) # 10 epoch for ml1m
+	parser.add_argument('--epochs', help='number of epochs', default=10, type=int) # 10 epoch for ml1m
 
 
 def num(s):
@@ -36,24 +36,14 @@ def main():
 	predictor = parse.get_predictor(args)
 
 	dataset = DataHandler(dirname=args.dataset, extended_training_set=args.extended_set, shuffle_training=args.tshuffle)
-	# if args.dataset == "ml1m":
-	# 	args.min_iter = 50000
-	# 	args.progress = 5000
-	# elif args.dataset == 'netflix':
-	# 	args.min_iter = 600000
-	# 	args.progress = 40000
-	# elif args.dataset == 'rsc':
-	# 	args.min_iter = 800000
-	# 	args.progress = 200000
 
 	predictor.prepare_networks(dataset.n_items)
 	predictor.train(dataset,
-		progress=num(args.progress),
+		number_of_batches=num(args.number_of_batches),
 		autosave=args.save,
 		save_dir=dataset.dirname + "/models/" + args.dir,
-		min_iterations=args.min_iter,
+		epochs=args.epochs,
 		early_stopping=EsParse.get_early_stopper(args),
-		load_last_model=args.load_last_model,
 	    validation_metrics = args.metrics.split(','))
 
 
