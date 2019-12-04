@@ -53,7 +53,6 @@ def main():
 		save_dir=dataset.dirname + "/models/" + args.dir,
 		min_iterations=args.min_iter,
 		early_stopping=EsParse.get_early_stopper(args),
-		load_last_model=args.load_last_model,
 	    validation_metrics = args.metrics.split(','))
 
 
