@@ -152,8 +152,16 @@ class RNNBase(object):
         if load_last_model:
             epochs_offset = self.load_last(save_dir)
 
-        X, Y = self._gen_mini_batch(self.dataset.dirname)
-        x_val, y_val = self._gen_mini_batch(self.dataset.dirname, test=True)
+        sequence_train_all = np.load(self.dataset.dirname + '/data/sub_sequences_all_list.pickle', allow_pickle=True)
+        sequence_val_all = np.load(self.dataset.dirname + '/data/validation_all_list.pickle', allow_pickle=True)
+
+        batch_generator = self._gen_mini_batch(sequence_train_all)
+        val_generator = self._gen_mini_batch(sequence_val_all, test=True)
+
+        # val_generator = self._gen_mini_batch(self.sequence_noise(self.dataset.validation_set()))
+        # batch_generator = self._gen_mini_batch(self.sequence_noise(self.dataset.training_set()))
+        # X, Y = self._gen_mini_batch(self.dataset.dirname)
+        # x_val, y_val = self._gen_mini_batch(self.dataset.dirname, test=True)
 
         start_time = time()
         next_save = int(progress)
@@ -170,21 +178,24 @@ class RNNBase(object):
 
             checkpoint = ModelCheckpoint(filepath, verbose=1,
                                          monitor='val_loss', save_best_only=True, mode='auto')
+            #
+            # next(batch_generator)
+            # next(val_generator)
 
-            # history = self.model.fit_generator(batch_generator, epochs = min_iterations, steps_per_epoch= progress,
-            #                                 validation_data = val_generator, validation_steps=20,
-            #                                 # workers = 1, use_multiprocessing = True,
-            #                                    callbacks= [checkpoint],
-            #                                    verbose=2)
-
-            history = self.model.fit(X,Y, epochs = min_iterations, batch_size = self.batch_size,
-                                            validation_data = (x_val, y_val),
+            history = self.model.fit_generator(batch_generator, epochs = min_iterations, steps_per_epoch= progress,
+                                            validation_data = val_generator, validation_steps=1,
                                             # workers = 1, use_multiprocessing = True,
                                                callbacks= [checkpoint],
                                                verbose=2)
-            cost = history.history['loss']
-            print(cost)
 
+            # history = self.model.fit(X,Y, epochs = min_iterations, batch_size = self.batch_size,
+            #                                 validation_data = (x_val, y_val),
+            #                                 # workers = 1, use_multiprocessing = True,
+            #                                    callbacks= [checkpoint],
+            #                                    verbose=2)
+        #     print('where is the bug come from?')
+            cost = history.history['loss']
+            # print(cost)
             current_train_cost = cost
             # print(current_train_cost)
 
@@ -234,6 +245,7 @@ class RNNBase(object):
         best_run = np.argmax(
             np.array(metrics[validation_metrics[0]]) * self.metrics[validation_metrics[0]]['direction'])
         return ({m: metrics[m][best_run] for m in self.metrics.keys()}, time() - start_time, filename[best_run])
+        # return cost
 
     # def _gen_mini_batch(self, sequence_generator, test=False):
     #     ''' Takes a sequence generator and produce a mini batch generator.
@@ -262,52 +274,72 @@ class RNNBase(object):
     #             j += 1
     #         yield self._prepare_input(sequences)
 
-    def _gen_mini_batch(self, dirname, test=False):
-
-        # while True:
-        #     j = 0
-        #     sequences = []
-        #     batch_size = self.batch_size
-        #     if test:
-        #         batch_size = 1
-        #     #     sequences = sequence_val_all
-        #
-        #     while j < batch_size:  # j : user order
-        #     #
-        #         if not test:
-        #             sequence = next(self.batch_generator(dirname))
-        #         else:
-        #             sequence = next(self.batch_generator(dirname), test = True)
-        #     #     if not test:
-        #     #     sequences.append(sequence)
-        #     #     else:
-        #     #         sequences = sequence_val_all
-        #     # else:
-        #     #     sequences = sequence_train_all[j:j+batch_size]
-        #     # sequences.append([user_id, sequence[start:start + l], target])
-        #     # print([user_id, sequence[start:l], target])
-        #     j += 1
-        sequence_train_all = np.load(dirname + '/data/sub_sequences_all_list.pickle', allow_pickle=True)
-        sequence_val_all = np.load(dirname + '/data/validation_all_list.pickle', allow_pickle=True)
-        if not test:
-            return self._prepare_input(sequence_train_all)
-        else:
-            return self._prepare_input(sequence_val_all)
-            # print('mini_generator yielded a batch %d' % i)
-            # i += 1
-
-    # def batch_generator(self, dirname, test=False):
-    #     for j in sequence_train_all:
-    #         j = 0
-    #         sequences = []
-    #         batch_size = self.batch_size
+    # def _gen_mini_batch(self, dirname, test=False):
     #
-    #         if not test:
-    #             sequences = sequence_train_all[j*batch_size: (j+1)*batch_size]
-    #         else:
-    #             sequences = sequence_val_all
-    #         j += 1
-    #         yield sequences
+    #     # while True:
+    #     #     j = 0
+    #     #     sequences = []
+    #     #     batch_size = self.batch_size
+    #     #     if test:
+    #     #         batch_size = 1
+    #     #     #     sequences = sequence_val_all
+    #     #
+    #     #     while j < batch_size:  # j : user order
+    #     #     #
+    #     #         if not test:
+    #     #             sequence = next(self.batch_generator(dirname))
+    #     #         else:
+    #     #             sequence = next(self.batch_generator(dirname), test = True)
+    #     #     #     if not test:
+    #     #     #     sequences.append(sequence)
+    #     #     #     else:
+    #     #     #         sequences = sequence_val_all
+    #     #     # else:
+    #     #     #     sequences = sequence_train_all[j:j+batch_size]
+    #     #     # sequences.append([user_id, sequence[start:start + l], target])
+    #     #     # print([user_id, sequence[start:l], target])
+    #     #     j += 1
+    #     sequence_train_all = np.load(dirname + '/data/sub_sequences_all_list.pickle', allow_pickle=True)
+    #     sequence_val_all = np.load(dirname + '/data/validation_all_list.pickle', allow_pickle=True)
+    #     if not test:
+    #         return self._prepare_input(sequence_train_all)
+    #     else:
+    #         return self._prepare_input(sequence_val_all)
+    #         # print('mini_generator yielded a batch %d' % i)
+    #         # i += 1
+
+    def _gen_mini_batch(self,dataset,test=False):
+
+        while True:
+            j=0
+            sequences = []
+            batch_size = self.batch_size
+            if test:
+                batch_size = len(dataset)
+
+            sub_sequence = self.batch_generator(dataset)
+            while j < batch_size:
+                sequence = next(sub_sequence)
+                sequences.append(sequence)
+                j +=1
+            yield self._prepare_input(sequences)
+
+
+    def batch_generator(self, dataset, test=False):
+
+        j = 0
+        while True:
+            # j = 0
+            # # sequences = []
+            # batch_size = self.batch_size
+            #
+            # if not test:
+            #     sequences = sequence_train_all[j*batch_size: (j+1)*batch_size]
+            # else:
+            #     sequences = sequence_val_all
+            # j += 1
+            yield dataset[j]
+            j += 1
 
     def _print_progress(self, iterations, epochs, start_time, train_costs
                         , metrics
