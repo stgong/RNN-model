@@ -250,6 +250,7 @@ class RNNBase(object):
             # print(counter)
             counter += 1
             yield self._prepare_input(sequences)
+            print('generator yielded a batch %d' % counter)
 
             # restart counter to yeild data in the next epoch as well
             if counter >= number_of_batches:
