@@ -177,7 +177,7 @@ class RNNBase(object):
             val_generator = DataGenerator(val_subseq_list, self.recurrent_layer.embedding_size, self.max_length, self._input_size())
 
 
-            history = self.model.fit_generator(batch_generator,
+            history = self.model.fit_generator(batch_generator, epochs = epochs,
                                             # steps_per_epoch=number_of_batches_input,
                                             validation_data=val_generator,
                                             # validation_steps=1,
