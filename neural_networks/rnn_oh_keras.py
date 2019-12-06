@@ -7,6 +7,7 @@ from keras import backend as be
 from keras.models import Sequential, load_model, Model
 from keras.layers import RNN, GRU, LSTM, Dense, Activation, Bidirectional, Masking, Embedding
 from .rnn_base import RNNBase
+import os
 from os import environ
 from helpers import evaluation
 
@@ -67,11 +68,12 @@ A diversity_bias of 0 produces the normal behavior, with no bias.
 
         self.model = Sequential()
         if self.recurrent_layer.embedding_size > 0:
-            # embedding_matrix = np.genfromtxt('/Users/xun/Documents/Thesis/Improving-RNN-recommendation-model/Dataset/ks-cooks-1y/embedding/recipe_tfidf_emb100.csv', delimiter=',')
-            # self.model.add(
-            #     Embedding(self.n_items, embedding_matrix.shape[1], weights=[embedding_matrix], mask_zero=True,
-            #               input_length=self.max_length, trainable=False))
-            self.model.add(Embedding(self.n_items, self.recurrent_layer.embedding_size, input_length=self.max_length, trainable=True))
+            path = os.getcwd()
+            embedding_matrix = np.genfromtxt(path + '/ks-cooks-1y/embedding/recipe_lstm_emb100.csv', delimiter=',')
+            self.model.add(
+                Embedding(self.n_items, embedding_matrix.shape[1], weights=[embedding_matrix], mask_zero=True,
+                          input_length=self.max_length, trainable=False))
+            # self.model.add(Embedding(self.n_items, self.recurrent_layer.embedding_size, input_length=self.max_length, trainable=True))
             self.model.add(Masking(mask_value=0.0))
         else:
             self.model.add(Masking(mask_value=0.0, input_shape=(self.max_length, self.n_items)))
