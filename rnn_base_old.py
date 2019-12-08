@@ -12,7 +12,7 @@ import numpy as np
 
 from .sequence_noise import SequenceNoise
 from .target_selection import SelectTargets
-from keras.models import Sequential, load_model, Model
+from tensorflow.keras.models import Sequential, load_model, Model
 from helpers import evaluation
 
 

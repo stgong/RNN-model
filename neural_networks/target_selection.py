@@ -1,5 +1,8 @@
 from __future__ import print_function
 
+from numpy.random import seed
+seed(1)
+
 import random
 
 import numpy as np

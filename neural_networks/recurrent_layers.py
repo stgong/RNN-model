@@ -1,6 +1,12 @@
 from __future__ import print_function
 
+from numpy.random import seed
+seed(1)
+# from tensorflow import set_random_seed
+# set_random_seed(2)
+
 import tensorflow as tf
+tf.random.set_seed(2)
 
 def recurrent_layers_command_parser(parser):
 	parser.add_argument('--r_t', dest='recurrent_layer_type', choices=['LSTM', 'GRU', 'Vanilla'], help='Type of recurrent layer', default='LSTM')
@@ -9,19 +15,24 @@ def recurrent_layers_command_parser(parser):
 	parser.add_argument('--r_emb',
 						help='Add an embedding layer before the RNN. Takes the size of the embedding as parameter, a size<1 means no embedding layer.',
 						type=int, default=8)
+	parser.add_argument('--r_emb_opt',choices=['own', 'lstm', 'tfidf'],
+						# help='Add an embedding layer before the RNN. Takes the size of the embedding as parameter, a size<1 means no embedding layer.',
+						type=str, default='own')
 	parser.add_argument('--ntd', help='do not get distribution for target, only tying', action='store_true')
 	parser.add_argument('--nwd', help='only get distribution for target(do not tying)', action='store_true')
 
 def get_recurrent_layers(args):
 	return RecurrentLayers(layer_type=args.recurrent_layer_type, layers=list(map(int, args.r_l.split('-'))), bidirectional=args.r_bi,
-						   embedding_size=args.r_emb, ntd=args.ntd, nwd=args.nwd)
+						   embedding_method=args.r_emb_opt, embedding_size=args.r_emb, ntd=args.ntd, nwd=args.nwd)
 
 class RecurrentLayers(object):
-	def __init__(self, layer_type="LSTM", layers=[32], bidirectional=False, embedding_size=0, grad_clipping=100, ntd=False, nwd=False):
+	def __init__(self, layer_type="LSTM", layers=[32], bidirectional=False, embedding_size=0, embedding_method="own", grad_clipping=100, ntd=False, nwd=False,
+				 ):
 		super(RecurrentLayers, self).__init__()
 		self.layer_type = layer_type
 		self.layers = layers
 		self.bidirectional = bidirectional
+		self.embedding_method = embedding_method
 		self.embedding_size = embedding_size
 		self.grad_clip=grad_clipping
 		self.no_td = ntd
