@@ -2,10 +2,11 @@ from __future__ import print_function
 
 from numpy.random import seed
 seed(1)
-from tensorflow import set_random_seed
-set_random_seed(2)
+# from tensorflow import set_random_seed
+# set_random_seed(2)
 
 import tensorflow as tf
+tf.random.set_seed(2)
 
 def recurrent_layers_command_parser(parser):
 	parser.add_argument('--r_t', dest='recurrent_layer_type', choices=['LSTM', 'GRU', 'Vanilla'], help='Type of recurrent layer', default='LSTM')

@@ -2,8 +2,8 @@ from __future__ import print_function
 
 from numpy.random import seed
 seed(1)
-from tensorflow import set_random_seed
-set_random_seed(2)
+# from tensorflow import set_random_seed
+# set_random_seed(2)
 
 import glob
 import os
@@ -17,9 +17,9 @@ import tensorflow as tf
 import helpers.command_parser as parse
 from helpers import evaluation
 from helpers.data_handling import DataHandler
-from keras.models import Model, load_model, save_model
-from keras import backend as be
-from keras.losses import binary_crossentropy, categorical_crossentropy
+from tensorflow.keras.models import Model, load_model, save_model
+from tensorflow.python.keras import backend as be
+from tensorflow.keras.losses import binary_crossentropy, categorical_crossentropy
 
 
 n_items = 1477

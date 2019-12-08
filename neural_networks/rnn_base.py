@@ -3,8 +3,7 @@ from __future__ import print_function
 
 from numpy.random import seed
 seed(1)
-from tensorflow import set_random_seed
-set_random_seed(2)
+
 
 import glob
 import os
@@ -18,9 +17,9 @@ import pickle
 
 from .sequence_noise import SequenceNoise
 from .target_selection import SelectTargets
-from keras.models import Sequential, load_model, Model
-from keras import callbacks
-from keras.callbacks import ModelCheckpoint
+from tensorflow.keras.models import Sequential, load_model, Model
+from tensorflow.keras import callbacks
+from tensorflow.keras.callbacks import ModelCheckpoint
 from helpers import evaluation
 
 

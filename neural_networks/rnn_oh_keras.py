@@ -3,15 +3,15 @@ from __future__ import print_function
 
 from numpy.random import seed
 seed(1)
-from tensorflow import set_random_seed
-set_random_seed(2)
+import tensorflow as tf
+tf.random.set_seed(2)
 
 
 import numpy as np
 from importlib import reload
-from keras import backend as be
-from keras.models import Sequential, load_model, Model
-from keras.layers import RNN, GRU, LSTM, Dense, Activation, Bidirectional, Masking, Embedding
+from tensorflow.python.keras import backend as be
+from tensorflow.keras.models import Sequential, load_model, Model
+from tensorflow.keras.layers import RNN, GRU, LSTM, Dense, Activation, Bidirectional, Masking, Embedding
 from .rnn_base import RNNBase
 import os
 from os import environ
@@ -64,8 +64,7 @@ A diversity_bias of 0 produces the normal behavior, with no bias.
         self.n_items = n_items
 
         if be.backend() == 'tensorflow':
-            import tensorflow as tf
-            from keras.backend.tensorflow_backend import set_session
+            from tensorflow.compat.v1.keras.backend import set_session
             # config = tf.ConfigProto(log_device_placement=True)
             # config = tf.ConfigProto()
             config = tf.compat.v1.ConfigProto()
@@ -74,18 +73,22 @@ A diversity_bias of 0 produces the normal behavior, with no bias.
 
         self.model = Sequential()
         if self.recurrent_layer.embedding_size > 0:
+            # choose the embedding method
             if self.recurrent_layer.embedding_method == 'own':
                 self.model.add(Embedding(self.n_items, self.recurrent_layer.embedding_size, input_length=self.max_length, trainable=True))
             elif self.recurrent_layer.embedding_method == 'lstm':
-                path = os.getcwd()
-                embedding_matrix = np.genfromtxt(path + '/ks-cooks-1y/embedding/recipe_lstm_emb100.csv', delimiter=',')
+                path = os.getcwd() + '/ks-cooks-1y/embedding/'
+                filename = "recipe_%s_emb%d" % self.recurrent_layer.embedding_method, self.recurrent_layer.embedding_size
+                embedding_matrix = np.genfromtxt(path + filename, delimiter=',')
+                self.model.add(
+                    Embedding(self.n_items, embedding_matrix.shape[1], weights=[embedding_matrix], mask_zero=True,
+                              input_length=self.max_length, trainable=False))
             elif self.recurrent_layer.embedding_method == 'tfidf':
                 path = os.getcwd()
                 embedding_matrix = np.genfromtxt(path + '/ks-cooks-1y/embedding/recipe_tfidf_emb100.csv', delimiter=',')
-            self.model.add(
-                Embedding(self.n_items, embedding_matrix.shape[1], weights=[embedding_matrix], mask_zero=True,
-                          input_length=self.max_length, trainable=False))
-
+                self.model.add(
+                    Embedding(self.n_items, embedding_matrix.shape[1], weights=[embedding_matrix], mask_zero=True,
+                              input_length=self.max_length, trainable=False))
             self.model.add(Masking(mask_value=0.0))
         else:
             self.model.add(Masking(mask_value=0.0, input_shape=(self.max_length, self.n_items)))

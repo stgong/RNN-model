@@ -1,63 +1,21 @@
-Using TensorFlow backend.
-2019-12-05 16:45:38.763703: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
-WARNING:tensorflow:From /Users/xun/Library/Python/3.7/lib/python/site-packages/tensorflow/python/framework/op_def_library.py:263: colocate_with (from tensorflow.python.framework.ops) is deprecated and will be removed in a future version.
-Instructions for updating:
-Colocations handled automatically by placer.
-WARNING:tensorflow:From /Users/xun/Library/Python/3.7/lib/python/site-packages/tensorflow/python/ops/math_ops.py:3066: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
-Instructions for updating:
-Use tf.cast instead.
+2019-12-08 15:19:52.850325: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2019-12-08 15:19:52.869257: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x7fd5fa7737e0 executing computations on platform Host. Devices:
+2019-12-08 15:19:52.869279: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): Host, Default Version
 Train on 177316 samples, validate on 629 samples
 Epoch 1/10
- - 376s - loss: 6.9387 - val_loss: 6.8730
-
-Epoch 00001: val_loss improved from inf to 6.87295, saving model to ks-cooks-1y/models/rnn_cce_ml60_bs32_ne2.936_gc100_e100_h150_Ug_lr0.1_nt1.hdf5
-Epoch 2/10
- - 376s - loss: 6.8121 - val_loss: 6.8685
-
-Epoch 00002: val_loss improved from 6.87295 to 6.86853, saving model to ks-cooks-1y/models/rnn_cce_ml60_bs32_ne2.936_gc100_e100_h150_Ug_lr0.1_nt1.hdf5
-Epoch 3/10
- - 377s - loss: 6.7676 - val_loss: 6.8311
-
-Epoch 00003: val_loss improved from 6.86853 to 6.83109, saving model to ks-cooks-1y/models/rnn_cce_ml60_bs32_ne2.936_gc100_e100_h150_Ug_lr0.1_nt1.hdf5
-Epoch 4/10
- - 387s - loss: 6.7179 - val_loss: 6.8220
-
-Epoch 00004: val_loss improved from 6.83109 to 6.82205, saving model to ks-cooks-1y/models/rnn_cce_ml60_bs32_ne2.936_gc100_e100_h150_Ug_lr0.1_nt1.hdf5
-Epoch 5/10
- - 379s - loss: 6.6779 - val_loss: 6.8153
-
-Epoch 00005: val_loss improved from 6.82205 to 6.81527, saving model to ks-cooks-1y/models/rnn_cce_ml60_bs32_ne2.936_gc100_e100_h150_Ug_lr0.1_nt1.hdf5
-Epoch 6/10
- - 374s - loss: 6.6410 - val_loss: 6.8038
-
-Epoch 00006: val_loss improved from 6.81527 to 6.80384, saving model to ks-cooks-1y/models/rnn_cce_ml60_bs32_ne2.936_gc100_e100_h150_Ug_lr0.1_nt1.hdf5
-Epoch 7/10
- - 375s - loss: 6.6057 - val_loss: 6.7979
-
-Epoch 00007: val_loss improved from 6.80384 to 6.79786, saving model to ks-cooks-1y/models/rnn_cce_ml60_bs32_ne2.936_gc100_e100_h150_Ug_lr0.1_nt1.hdf5
-Epoch 8/10
- - 369s - loss: 6.5726 - val_loss: 6.7994
-
-Epoch 00008: val_loss did not improve from 6.79786
-Epoch 9/10
- - 366s - loss: 6.5402 - val_loss: 6.7976
-
-Epoch 00009: val_loss improved from 6.79786 to 6.79763, saving model to ks-cooks-1y/models/rnn_cce_ml60_bs32_ne2.936_gc100_e100_h150_Ug_lr0.1_nt1.hdf5
-Epoch 10/10
- - 365s - loss: 6.5094 - val_loss: 6.7867
-
-Epoch 00010: val_loss improved from 6.79763 to 6.78674, saving model to ks-cooks-1y/models/rnn_cce_ml60_bs32_ne2.936_gc100_e100_h150_Ug_lr0.1_nt1.hdf5
-[6.938697552594377, 6.812117395315162, 6.767574092004706, 6.7179156262874224, 6.677948351073533, 6.640970413086069, 6.605680419938913, 6.572649511333279, 6.540188978256676, 6.509444873083258]
-Opening file (1)
-RNN with categorical cross entropy 0 batchs,  3746.7150089740753  epochs in 3751.980427980423 s
-Last train cost :  6.678318721297339
-recall :  0.051925002502294454
-precision :  0.08219395866454725
-sps :  0.057233704292527825
-Best  sps :  0.057233704292527825
-user_coverage :  0.5214626391096979
-item_coverage :  78
-ndcg :  0.08761278426849897
-blockbuster_share :  0.6402321083172147
------------------
-Save model in ks-cooks-1y/models/rnn_cce_ml60_bs32_ne3746.715_gc100_e100_h150_Ug_lr0.1_nt1.hdf5
+2019-12-08 15:19:59.392524: W tensorflow/core/grappler/optimizers/implementation_selector.cc:310] Skipping optimization due to error while loading function libraries: Invalid argument: Functions '__inference___backward_cudnn_lstm_with_fallback_5815_7274' and '__inference___backward_standard_lstm_7392_7991_specialized_for_StatefulPartitionedCall_at___inference_distributed_function_8128' both implement 'lstm_b2ce65f3-9b98-4278-bd6a-f869f1463d09' but their signatures do not match.
+Training interrupted
+WARNING: Logging before flag parsing goes to stderr.
+W1208 15:22:52.666534 4723717568 callbacks.py:990] Can save best model only with val_loss available, skipping.
+Traceback (most recent call last):
+  File "/Users/xun/Documents/Thesis/RNN-model/train.py", line 66, in <module>
+    main()
+  File "/Users/xun/Documents/Thesis/RNN-model/train.py", line 62, in main
+    validation_metrics = args.metrics.split(','))
+  File "/Users/xun/Documents/Thesis/RNN-model/neural_networks/rnn_base.py", line 239, in train
+    np.array(metrics[validation_metrics[0]]) * self.metrics[validation_metrics[0]]['direction'])
+  File "/Users/xun/Library/Python/3.7/lib/python/site-packages/numpy/core/fromnumeric.py", line 1103, in argmax
+    return _wrapfunc(a, 'argmax', axis=axis, out=out)
+  File "/Users/xun/Library/Python/3.7/lib/python/site-packages/numpy/core/fromnumeric.py", line 56, in _wrapfunc
+    return getattr(obj, method)(*args, **kwds)
+ValueError: attempt to get argmax of an empty sequence

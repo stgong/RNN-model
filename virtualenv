@@ -40,3 +40,11 @@ pip freeze > requirements.txt
 # remove not empty dir
 rm -rf dir1
 
+
+python -V
+# check tensor flow version
+# 1.0
+tf.version
+#2.0
+tf.__version__
+

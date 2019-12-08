@@ -1,4 +1,5 @@
 import tensorflow as tf
+tf.random.set_seed(2)
 
 def update_manager_command_parser(parser):
 	parser.add_argument('--u_m', dest='update_manager', choices=['adagrad', 'adadelta', 'rmsprop', 'nesterov', 'adam'], help='Update mechanism', default='adagrad')

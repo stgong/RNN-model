@@ -2,8 +2,8 @@ from __future__ import print_function
 
 from numpy.random import seed
 seed(1)
-from tensorflow import set_random_seed
-set_random_seed(2)
+# from tensorflow import set_random_seed
+# set_random_seed(2)
 
 from helpers import evaluation
 from helpers.data_handling import DataHandler
@@ -14,10 +14,10 @@ import os
 import pickle
 from time import time
 
-from keras import backend as be
-from keras.models import Sequential, load_model, Model
-from keras.layers import RNN, GRU, LSTM, Dense, Activation, Bidirectional, Masking, Embedding
-from keras.optimizers import Adagrad, Adam, SGD, RMSprop
+from tensorflow.python.keras import backend as be
+from tensorflow.keras.models import Sequential, load_model, Model
+from tensorflow.keras.layers import RNN, GRU, LSTM, Dense, Activation, Bidirectional, Masking, Embedding
+from tensorflow.keras.optimizers import Adagrad, Adam, SGD, RMSprop
 
 n_items = 1477
 embedding_size = 8
@@ -44,7 +44,7 @@ metrics = {'recall': {'direction': 1},
 def prepare_networks(n_items, embedding_size, max_length):
     if be.backend() == 'tensorflow':
         import tensorflow as tf
-        from keras.backend.tensorflow_backend import set_session
+        from tensorflow.keras.backend.tensorflow_backend import set_session
         config = tf.ConfigProto()
         # config.gpu_options.per_process_gpu_memory_fraction = self.tf_mem_frac
         set_session(tf.Session(config=config))
