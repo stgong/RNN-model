@@ -78,14 +78,15 @@ A diversity_bias of 0 produces the normal behavior, with no bias.
                 self.model.add(Embedding(self.n_items, self.recurrent_layer.embedding_size, input_length=self.max_length, trainable=True))
             elif self.recurrent_layer.embedding_method == 'lstm':
                 path = os.getcwd() + '/ks-cooks-1y/embedding/'
-                filename = "recipe_%s_emb%d" % self.recurrent_layer.embedding_method, self.recurrent_layer.embedding_size
+                filename = "recipe_%s_emb%d.csv" % (self.recurrent_layer.embedding_method, self.recurrent_layer.embedding_size)
                 embedding_matrix = np.genfromtxt(path + filename, delimiter=',')
                 self.model.add(
                     Embedding(self.n_items, embedding_matrix.shape[1], weights=[embedding_matrix], mask_zero=True,
                               input_length=self.max_length, trainable=False))
             elif self.recurrent_layer.embedding_method == 'tfidf':
-                path = os.getcwd()
-                embedding_matrix = np.genfromtxt(path + '/ks-cooks-1y/embedding/recipe_tfidf_emb100.csv', delimiter=',')
+                path = os.getcwd() + '/ks-cooks-1y/embedding/'
+                filename = "recipe_%s_emb%d.csv" % (self.recurrent_layer.embedding_method, self.recurrent_layer.embedding_size)
+                embedding_matrix = np.genfromtxt(path + filename, delimiter=',')
                 self.model.add(
                     Embedding(self.n_items, embedding_matrix.shape[1], weights=[embedding_matrix], mask_zero=True,
                               input_length=self.max_length, trainable=False))
