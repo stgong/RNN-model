@@ -1,4 +1,4 @@
-from keras import optimizers
+from tensorflow.keras import optimizers
 
 def update_manager_command_parser(parser):
 	parser.add_argument('--u_m', dest='update_manager', choices=['adagrad', 'adadelta', 'rmsprop', 'adam'], help='Update mechanism',
