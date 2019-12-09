@@ -42,9 +42,12 @@ rm -rf dir1
 
 
 python -V
-# check tensor flow version
+# check tensorflow version in Jupiter
 # 1.0
 tf.version
 #2.0
 tf.__version__
+
+#check in bash
+python3 -c 'import tensorflow as tf; print(tf.__version__)'
 
