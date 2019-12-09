@@ -38,7 +38,7 @@ def save_file_name(predictor, dataset, args):
     if not args.save:
         return None
     else:
-        file = re.sub('_ne\*_', '_', dataset.dirname + 'results/' + get_file_name(predictor, args))
+        file = re.sub('_ne\*_', '_', dataset.dirname + '/results/' + get_file_name(predictor, args))
         return file
 
 
@@ -142,7 +142,7 @@ def test_command_parser(parser):
                         type=int)
     parser.add_argument('--metrics', help='List of metrics to compute, comma separated',
                         default='sps,recall,precision,item_coverage,user_coverage,ndcg,blockbuster_share', type=str)
-    parser.add_argument('--save', help='Save results to a file', default='True', action='store_true')
+    parser.add_argument('--save', help='Save results to a file', default='False', type=str)
     parser.add_argument('--dir', help='Model directory.', default="", type=str)
     parser.add_argument('--save_rank', help='Save the full comparison of goal and prediction ranking.', default='False',
                         action='store_true')
