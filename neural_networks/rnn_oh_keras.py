@@ -63,13 +63,11 @@ A diversity_bias of 0 produces the normal behavior, with no bias.
 
         self.n_items = n_items
 
-        if be.backend() == 'tensorflow':
-            from tensorflow.compat.v1.keras.backend import set_session
-            # config = tf.ConfigProto(log_device_placement=True)
-            # config = tf.ConfigProto()
-            config = tf.compat.v1.ConfigProto()
-            config.gpu_options.per_process_gpu_memory_fraction = self.tf_mem_frac
-            tf.compat.v1.Session(config=config)
+        config = tf.compat.v1.ConfigProto()
+        # config.gpu_options.per_process_gpu_memory_fraction = self.tf_mem_frac
+        config.gpu_options.allow_growth = True
+        tf.compat.v1.Session(config=config)
+
 
         self.model = Sequential()
         if self.recurrent_layer.embedding_size > 0:
