@@ -3,7 +3,8 @@ from __future__ import print_function
 
 from numpy.random import seed
 seed(1)
-
+import logging
+logging.getLogger('tensorflow').disabled = True
 
 import glob
 import os
@@ -14,7 +15,8 @@ from time import time
 
 import numpy as np
 import pickle
-
+import tensorflow.compat.v1 as tf
+tf.disable_eager_execution()
 from .sequence_noise import SequenceNoise
 from .target_selection import SelectTargets
 from tensorflow.keras.models import Sequential, load_model, Model
@@ -110,10 +112,16 @@ class RNNBase(object):
         # filter out viewed items
         output[0][[i[0] for i in sequence]] = -np.inf
 
-        # exclude items given in args
-        # output[exclude] = -np.inf
+        # indices = tf.constant([[i[0]] for i in sequence], shape=(len(sequence),1))
+        # updates = tf.constant(-np.inf, shape=(len(sequence),1))
+        # output = tf.tensor_scatter_update(tf.reshape(output, (1477,1)), indices, updates)
+        # output = tf.reshape(output, (1,1477))
 
-        # find top k according to output
+
+        # output_array = output.numpy()
+        # output_array[0][[i[0] for i in sequence]] = -np.inf
+        # output = tf.convert_to_tensor(output_array)
+
         return list(np.argpartition(-output[0], list(range(k)))[:k])
 
     def set_dataset(self, dataset):
