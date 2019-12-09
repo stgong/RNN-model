@@ -3,8 +3,12 @@ from __future__ import print_function
 
 from numpy.random import seed
 seed(1)
+
 # from tensorflow import set_random_seed
 # set_random_seed(2)
+
+import logging
+logging.getLogger('tensorflow').disabled = True
 
 import glob
 import os

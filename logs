@@ -1,18 +1,22 @@
-2019-12-08 15:19:52.850325: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
-2019-12-08 15:19:52.869257: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x7fd5fa7737e0 executing computations on platform Host. Devices:
-2019-12-08 15:19:52.869279: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): Host, Default Version
+2019-12-09 00:46:20.316922: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2019-12-09 00:46:20.349570: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x7fdef89c41e0 executing computations on platform Host. Devices:
+2019-12-09 00:46:20.349583: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): Host, Default Version
+WARNING: Logging before flag parsing goes to stderr.
+W1209 00:46:20.371930 4535395776 deprecation.py:506] From /usr/local/lib/python3.7/site-packages/tensorflow_core/python/ops/resource_variable_ops.py:1630: calling BaseResourceVariable.__init__ (from tensorflow.python.ops.resource_variable_ops) with constraint is deprecated and will be removed in a future version.
+Instructions for updating:
+If using Keras pass *_constraint arguments to layers.
+W1209 00:46:23.744548 4535395776 deprecation.py:506] From /usr/local/lib/python3.7/site-packages/tensorflow_core/python/keras/optimizer_v2/adagrad.py:108: calling Constant.__init__ (from tensorflow.python.ops.init_ops) with dtype is deprecated and will be removed in a future version.
+Instructions for updating:
+Call initializer instance with the dtype argument instead of passing it to the constructor
 Train on 177316 samples, validate on 629 samples
 Epoch 1/10
-2019-12-08 15:19:59.392524: W tensorflow/core/grappler/optimizers/implementation_selector.cc:310] Skipping optimization due to error while loading function libraries: Invalid argument: Functions '__inference___backward_cudnn_lstm_with_fallback_5815_7274' and '__inference___backward_standard_lstm_7392_7991_specialized_for_StatefulPartitionedCall_at___inference_distributed_function_8128' both implement 'lstm_b2ce65f3-9b98-4278-bd6a-f869f1463d09' but their signatures do not match.
-Training interrupted
-WARNING: Logging before flag parsing goes to stderr.
-W1208 15:22:52.666534 4723717568 callbacks.py:990] Can save best model only with val_loss available, skipping.
 Traceback (most recent call last):
+Training interrupted
   File "/Users/xun/Documents/Thesis/RNN-model/train.py", line 66, in <module>
     main()
   File "/Users/xun/Documents/Thesis/RNN-model/train.py", line 62, in main
     validation_metrics = args.metrics.split(','))
-  File "/Users/xun/Documents/Thesis/RNN-model/neural_networks/rnn_base.py", line 239, in train
+  File "/Users/xun/Documents/Thesis/RNN-model/neural_networks/rnn_base.py", line 262, in train
     np.array(metrics[validation_metrics[0]]) * self.metrics[validation_metrics[0]]['direction'])
   File "/Users/xun/Library/Python/3.7/lib/python/site-packages/numpy/core/fromnumeric.py", line 1103, in argmax
     return _wrapfunc(a, 'argmax', axis=axis, out=out)
