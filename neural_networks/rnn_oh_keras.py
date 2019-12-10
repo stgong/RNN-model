@@ -178,11 +178,14 @@ A diversity_bias of 0 produces the normal behavior, with no bias.
         #
         metrics['recall'].append(ev.average_recall())
         metrics['sps'].append(ev.sps())
+        metrics['sps_short'].append(ev.sps_short())
+        metrics['sps_long'].append(ev.sps_long())
         metrics['precision'].append(ev.average_precision())
         metrics['ndcg'].append(ev.average_ndcg())
         metrics['user_coverage'].append(ev.user_coverage())
         metrics['item_coverage'].append(ev.item_coverage())
         metrics['blockbuster_share'].append(ev.blockbuster_share())
+        metrics['intra_list_similarity'].append(ev.intra_list_similarity())
 
         # del ev
         ev.nb_of_dp = self.dataset.n_items
