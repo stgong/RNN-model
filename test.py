@@ -141,7 +141,7 @@ def test_command_parser(parser):
                         help='Number of predictions to make. It is the "k" in "prec@k", "rec@k", etc.', default=10,
                         type=int)
     parser.add_argument('--metrics', help='List of metrics to compute, comma separated',
-                        default='sps,sps_short,sps_long,recall,precision,item_coverage,user_coverage,ndcg,blockbuster_share,intra_list_similarity', type=str)
+                        default='sps,sps_short,sps_long,recall,precision,uniq_rec,total_item_coverage,item_coverage,user_coverage,ndcg,blockbuster_share,intra_list_similarity', type=str)
     parser.add_argument('--save', help='Save results to a file', default=False, action='store_true')
     parser.add_argument('--dir', help='Model directory.', default="", type=str)
     parser.add_argument('--save_rank', help='Save the full comparison of goal and prediction ranking.', default='False',

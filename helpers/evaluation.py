@@ -31,6 +31,8 @@ class Evaluator(object):
                         'recall': self.average_recall,
                         'precision': self.average_precision,
                         'ndcg': self.average_ndcg,
+                        'uniq_rec': self.uniq_rec,
+                        'total_item_coverage': self.total_item_coverage,
                         'item_coverage': self.item_coverage,
                         'user_coverage': self.user_coverage,
                         'assr': self.assr,
@@ -96,6 +98,7 @@ class Evaluator(object):
         if len(correct_predictions) == 0:
             return 0
         return len([i for i in correct_predictions if i in pop_items]) / len(correct_predictions)
+
 
     def average_novelty(self):
         '''Return the average novelty measure, as defined in "Auralist: Introducing Serendipity into Music Recommendation"
@@ -256,6 +259,20 @@ class Evaluator(object):
 
     def item_coverage(self):
         return len(set(self.get_correct_predictions()))
+
+    def total_item_coverage(self):
+        '''Return the total number of the correct predictions of each instances
+        '''
+        return len(self.get_correct_predictions())
+
+    def uniq_rec(self):
+        '''Return the total number of unique items in the recommendation list
+        '''
+        rec_l = []
+        for goal, prediction in self.instances:
+            rec_l.append(prediction)
+        rec_item_list = [item for sublist in rec_l for item in sublist]
+        return len(set(rec_item_list))
 
     def get_correct_strict_predictions(self):
         '''Return a concatenation of the strictly correct predictions of each instances (i.e. predicted the first goal)
