@@ -63,13 +63,11 @@ A diversity_bias of 0 produces the normal behavior, with no bias.
 
         self.n_items = n_items
 
-        if be.backend() == 'tensorflow':
-            from tensorflow.compat.v1.keras.backend import set_session
-            # config = tf.ConfigProto(log_device_placement=True)
-            # config = tf.ConfigProto()
-            config = tf.compat.v1.ConfigProto()
-            config.gpu_options.per_process_gpu_memory_fraction = self.tf_mem_frac
-            tf.compat.v1.Session(config=config)
+        config = tf.compat.v1.ConfigProto()
+        # config.gpu_options.per_process_gpu_memory_fraction = self.tf_mem_frac
+        config.gpu_options.allow_growth = True
+        tf.compat.v1.Session(config=config)
+
 
         self.model = Sequential()
         if self.recurrent_layer.embedding_size > 0:
@@ -180,11 +178,14 @@ A diversity_bias of 0 produces the normal behavior, with no bias.
         #
         metrics['recall'].append(ev.average_recall())
         metrics['sps'].append(ev.sps())
+        metrics['sps_short'].append(ev.sps_short())
+        metrics['sps_long'].append(ev.sps_long())
         metrics['precision'].append(ev.average_precision())
         metrics['ndcg'].append(ev.average_ndcg())
         metrics['user_coverage'].append(ev.user_coverage())
         metrics['item_coverage'].append(ev.item_coverage())
         metrics['blockbuster_share'].append(ev.blockbuster_share())
+        metrics['intra_list_similarity'].append(ev.intra_list_similarity())
 
         # del ev
         ev.nb_of_dp = self.dataset.n_items
