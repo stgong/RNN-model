@@ -184,10 +184,10 @@ A diversity_bias of 0 produces the normal behavior, with no bias.
         metrics['ndcg'].append(ev.average_ndcg())
         metrics['user_coverage'].append(ev.user_coverage())
         metrics['item_coverage'].append(ev.item_coverage())
-        metrics['item_coverage'].append(ev.total_item_coverage())
-        metrics['uniq_rec'].append(ev.uniq_rec()),
+        metrics['total_item_coverage'].append(ev.total_item_coverage())
+        metrics['uniq_rec'].append(ev.uniq_rec())
         metrics['blockbuster_share'].append(ev.blockbuster_share())
-        metrics['intra_list_similarity'].append(ev.intra_list_similarity())
+        metrics['intra_list_similarity'].append(ev.average_intra_list_similarity())
 
         # del ev
         ev.nb_of_dp = self.dataset.n_items

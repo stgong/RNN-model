@@ -70,7 +70,7 @@ class RNNBase(object):
                         'uniq_rec': {'direction': 1},
                         'ndcg': {'direction': 1},
                         'blockbuster_share': {'direction': -1},
-                        'intra_list_similarity' : {'direction': 1}
+                        'intra_list_similarity': {'direction': 1}
                         }
 
 
