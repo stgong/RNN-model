@@ -68,7 +68,7 @@ class RNNBase(object):
                         'item_coverage': {'direction': 1},
                         'ndcg': {'direction': 1},
                         'blockbuster_share': {'direction': -1},
-                        'intra_list_similarity' : {'direction': 1}
+                        'intra_list_similarity': {'direction': 1}
                         }
 
 
@@ -141,7 +141,7 @@ class RNNBase(object):
                 is_efficient[is_efficient] = np.any(costs[is_efficient] >= c, axis=1)
         return np.where(is_efficient)[0].tolist()
 
-    def train(self, dataset,
+    def train(self, dataset,tensorboard_callback,
               max_time=np.inf,
               progress=5000,
               autosave='Best',
@@ -195,7 +195,7 @@ class RNNBase(object):
             history = self.model.fit(X,Y, epochs = min_iterations, batch_size = self.batch_size,
                                             validation_data = (x_val, y_val),
                                             # workers = 1, use_multiprocessing = True,
-                                               callbacks= [checkpoint],
+                                            #    callbacks= [checkpoint,tensorboard_callback],
                                                verbose=2)
             cost = history.history['loss']
             print(cost)
@@ -302,8 +302,8 @@ class RNNBase(object):
         #     # sequences.append([user_id, sequence[start:start + l], target])
         #     # print([user_id, sequence[start:l], target])
         #     j += 1
-        sequence_train_all = np.load(dirname + '/data/sub_sequences_all_list.pickle', allow_pickle=True)
-        sequence_val_all = np.load(dirname + '/data/validation_all_list.pickle', allow_pickle=True)
+        sequence_train_all = np.load(dirname + '/data/sub_sequences_all_list.pickle', allow_pickle=True)[0:32]
+        sequence_val_all = np.load(dirname + '/data/validation_all_list.pickle', allow_pickle=True)[0:1]
         if not test:
             return self._prepare_input(sequence_train_all)
         else:
