@@ -34,8 +34,10 @@ metrics = {'recall': {'direction': 1},
            'sps': {'direction': 1},
            'user_coverage': {'direction': 1},
            'item_coverage': {'direction': 1},
+           'total_item_coverage': {'direction': 1},
            'ndcg': {'direction': 1},
-           'blockbuster_share': {'direction': -1}
+           'blockbuster_share': {'direction': -1},
+           'intra_list_similarity':  {'direction': 1}
            }
 
 

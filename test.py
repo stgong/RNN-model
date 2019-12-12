@@ -105,7 +105,7 @@ def print_results(ev, metrics, file=None, n_batches=None, print_full_rank_compar
                 for data in ev.get_rank_comparison():
                     f.write("\t".join(map(str, data)) + "\n")
     else:
-        print("-\t" + "\t".join(map(str, [ev.metrics[m]() for m in metrics])), file=sys.stderr)
+        # print("-\t" + "\t".join(map(str, [ev.metrics[m]() for m in metrics])), file=sys.stderr)
         if print_full_rank_comparison:
             with open(file + "_full_rank", "a") as f:
                 for data in ev.get_rank_comparison():
@@ -141,8 +141,8 @@ def test_command_parser(parser):
                         help='Number of predictions to make. It is the "k" in "prec@k", "rec@k", etc.', default=10,
                         type=int)
     parser.add_argument('--metrics', help='List of metrics to compute, comma separated',
-                        default='sps,recall,precision,item_coverage,user_coverage,ndcg,blockbuster_share', type=str)
-    parser.add_argument('--save', help='Save results to a file', default='False', type=str)
+                        default='sps,sps_short,sps_long,recall,precision,uniq_rec,total_item_coverage,item_coverage,user_coverage,ndcg,blockbuster_share,intra_list_similarity', type=str)
+    parser.add_argument('--save', help='Save results to a file', default=False, action='store_true')
     parser.add_argument('--dir', help='Model directory.', default="", type=str)
     parser.add_argument('--save_rank', help='Save the full comparison of goal and prediction ranking.', default='False',
                         action='store_true')

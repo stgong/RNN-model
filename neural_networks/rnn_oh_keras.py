@@ -3,8 +3,10 @@ from __future__ import print_function
 
 from numpy.random import seed
 seed(1)
-import tensorflow as tf
-tf.random.set_seed(2)
+# import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_eager_execution()
+# tf.set_random_seed(2)
 
 
 import numpy as np
@@ -63,10 +65,10 @@ A diversity_bias of 0 produces the normal behavior, with no bias.
 
         self.n_items = n_items
 
-        config = tf.compat.v1.ConfigProto()
+        config = tf.ConfigProto()
         # config.gpu_options.per_process_gpu_memory_fraction = self.tf_mem_frac
         config.gpu_options.allow_growth = True
-        tf.compat.v1.Session(config=config)
+        tf.Session(config=config)
 
 
         self.model = Sequential()
@@ -178,11 +180,16 @@ A diversity_bias of 0 produces the normal behavior, with no bias.
         #
         metrics['recall'].append(ev.average_recall())
         metrics['sps'].append(ev.sps())
+        metrics['sps_short'].append(ev.sps_short())
+        metrics['sps_long'].append(ev.sps_long())
         metrics['precision'].append(ev.average_precision())
         metrics['ndcg'].append(ev.average_ndcg())
         metrics['user_coverage'].append(ev.user_coverage())
         metrics['item_coverage'].append(ev.item_coverage())
+        metrics['total_item_coverage'].append(ev.total_item_coverage())
+        metrics['uniq_rec'].append(ev.uniq_rec())
         metrics['blockbuster_share'].append(ev.blockbuster_share())
+        metrics['intra_list_similarity'].append(ev.average_intra_list_similarity())
 
         # del ev
         ev.nb_of_dp = self.dataset.n_items

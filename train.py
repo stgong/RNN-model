@@ -2,14 +2,17 @@ from __future__ import print_function
 
 from numpy.random import seed
 seed(1)
-# from tensorflow import set_random_seed
-# set_random_seed(2)
+
+import tensorflow.compat.v1 as tf
+tf.disable_eager_execution()
+# tf.random.set_seed(2)
 
 import numpy as np
 import helpers.command_parser as cp
 import helpers.command_parser as parse
 import helpers.early_stopping as EsParse
 from helpers.data_handling import DataHandler
+import os, datetime
 
 
 
@@ -51,8 +54,11 @@ def main():
 	# 	args.min_iter = 800000
 	# 	args.progress = 200000
 
+	logdir = os.path.join(os.getcwd(),"logs", datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
+	tensorboard_callback = tf.keras.callbacks.TensorBoard(logdir, histogram_freq=1)
+
 	predictor.prepare_networks(dataset.n_items)
-	predictor.train(dataset,
+	predictor.train(dataset,tensorboard_callback=tensorboard_callback,
 		progress=num(args.progress),
 		autosave=args.save,
 		save_dir=dataset.dirname + "/models/" + args.dir,
