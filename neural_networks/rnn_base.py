@@ -304,8 +304,8 @@ class RNNBase(object):
         #     # sequences.append([user_id, sequence[start:start + l], target])
         #     # print([user_id, sequence[start:l], target])
         #     j += 1
-        sequence_train_all = np.load(dirname + '/data/sub_sequences_all_list.pickle', allow_pickle=True)[0:100]
-        sequence_val_all = np.load(dirname + '/data/validation_all_list.pickle', allow_pickle=True)[0:100]
+        sequence_train_all = np.load(dirname + '/data/sub_sequences_all_list.pickle', allow_pickle=True)
+        sequence_val_all = np.load(dirname + '/data/validation_all_list.pickle', allow_pickle=True)
         if not test:
             return self._prepare_input(sequence_train_all)
         else:
