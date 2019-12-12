@@ -143,7 +143,7 @@ class RNNBase(object):
                 is_efficient[is_efficient] = np.any(costs[is_efficient] >= c, axis=1)
         return np.where(is_efficient)[0].tolist()
 
-    def train(self, dataset,
+    def train(self, dataset,tensorboard_callback,
               max_time=np.inf,
               progress=5000,
               autosave='Best',
@@ -197,7 +197,7 @@ class RNNBase(object):
             history = self.model.fit(X,Y, epochs = min_iterations, batch_size = self.batch_size,
                                             validation_data = (x_val, y_val),
                                             # workers = 1, use_multiprocessing = True,
-                                               callbacks= [checkpoint],
+                                               callbacks= [checkpoint, tensorboard_callback],
                                                verbose=2)
             cost = history.history['loss']
             print(cost)

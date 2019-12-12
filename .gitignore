@@ -1,9 +1,5 @@
 .idea/
-logs/
 ml1m.dat
 Dataset/
-
-
 *.pyc
-logs
-ks-cooks-1y/models/rnn_cce_ml30_bs32_ne0.0_gc100_e100_h50_Ug_lr0.1_nt1.hdf5
+
