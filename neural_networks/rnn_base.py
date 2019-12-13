@@ -184,9 +184,10 @@ class RNNBase(object):
         try:
             filepath = save_dir + self._get_model_filename(
                 round(time() - time1, 3))
+            filepath = filepath[0:-5]
 
-            checkpoint = ModelCheckpoint(filepath, verbose=1,
-                                         monitor='val_loss', save_best_only=True, mode='auto')
+            checkpoint = ModelCheckpoint(filepath + '{epoch:03d}.hdf5', verbose=1,
+                                         monitor='val_loss', save_best_only=False, mode='auto')
 
             # history = self.model.fit_generator(batch_generator, epochs = min_iterations, steps_per_epoch= progress,
             #                                 validation_data = val_generator, validation_steps=20,
