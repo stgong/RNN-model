@@ -11,8 +11,9 @@ virtual -p python3 remote_env
 
 
 source remote_env/bin/activate
-pip install -r requirements.txt
 
+pip install -r requirements.txt
+pip freeze > requirements.txt
 
 
 # pip install jupyter
@@ -34,7 +35,6 @@ git remote set-url origin "https://stgong:Pass19911031%21@github.com/stgong/RNN-
 
 git push -u origin master
 
-pip freeze > requirements.txt
 
 
 # remove not empty dir
