@@ -97,7 +97,7 @@ path = '/Users/xun/Documents/Thesis/RNN-model/'
 dirname= "ks-cooks-1y"
 # dirname= "ml-1M"
 # model_name = 'rnn_cce_ml30_bs64_ne50.0_gc100_e8_h50_Ug_lr0.1_nt1.ktf'
-model_name = 'rnn_cce_ml60_bs32_ne3251.557_gc100_e100_h100_Ug_lr0.1_nt1.hdf5'
+model_name = 'rnn_cce_ml60_bs32_ne3378.139_gc100_e100_h100_Ug_lr0.1_nt1.hdf5'
 # model_name = 'rnn_cce_ml30_bs64_ne28.337_gc100_e8_h50_Ug_lr0.1_nt1.ktf'
 dataset = DataHandler(dirname=dirname)
 
@@ -215,17 +215,17 @@ outfile2 = path+dirname+'/data/score_dict_lstm.pickle'
 outfile3 = path+dirname+'/data/true_positive_lstm.pickle'
 
 # # outfile4 = path+dirname+'/data/true_positive_imp.pickle'
-# outfile5 = path+dirname+'/data/rnn_predictions_emb16.pickle'
+outfile5 = path+dirname+'/data/rnn_predictions.pickle'
 # with open(outfile, 'wb') as fp:
 #     pickle.dump(test_u_id, fp)
-with open(outfile1, 'wb') as fp:
-    pickle.dump(rec_dict, fp, protocol=pickle.HIGHEST_PROTOCOL)
-with open(outfile2, 'wb') as fp:
-    pickle.dump(score, fp, protocol=pickle.HIGHEST_PROTOCOL)
-with open(outfile3, 'wb') as fp:
-    pickle.dump(true_positive, fp, protocol=pickle.HIGHEST_PROTOCOL)
-# with open(outfile5, 'wb') as fp:
-#     pickle.dump(rec, fp, protocol=pickle.HIGHEST_PROTOCOL)
+# with open(outfile1, 'wb') as fp:
+#     pickle.dump(rec_dict, fp, protocol=pickle.HIGHEST_PROTOCOL)
+# with open(outfile2, 'wb') as fp:
+#     pickle.dump(score, fp, protocol=pickle.HIGHEST_PROTOCOL)
+# with open(outfile3, 'wb') as fp:
+#     pickle.dump(true_positive, fp, protocol=pickle.HIGHEST_PROTOCOL)
+with open(outfile5, 'wb') as fp:
+    pickle.dump(rec, fp, protocol=pickle.HIGHEST_PROTOCOL)
 #
 # with open(path+dirname+'/data/test_input.pickle', 'wb') as fp:
 #     pickle.dump(test_input, fp)
