@@ -1,10 +1,5 @@
 from __future__ import print_function
 
-from numpy.random import seed
-seed(1)
-# from tensorflow import set_random_seed
-# set_random_seed(2)
-
 import glob
 import os
 import re
@@ -12,14 +7,17 @@ import sys
 import time
 import pickle
 import numpy as np
-import tensorflow as tf
+# import tensorflow as tf
+
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 
 import helpers.command_parser as parse
 from helpers import evaluation
 from helpers.data_handling import DataHandler
 from tensorflow.keras.models import Model, load_model, save_model
-from tensorflow.python.keras import backend as be
-from tensorflow.keras.losses import binary_crossentropy, categorical_crossentropy
+from keras import backend as be
+from keras.losses import binary_crossentropy, categorical_crossentropy
 
 def top_k_recommendations(model, sequence, max_length, embedding_size, n_items, k=10):
     ''' Receives a sequence of (id, rating), and produces k recommendations (as a list of ids)'''
@@ -84,7 +82,7 @@ def pop_k_recommendations(model, sequence, max_length, embedding_size, n_items, 
 
 
 
-n_items = 1507
+n_items = 1477
 embedding_size = 100
 max_length = 60
 metrics = {'recall': [],
@@ -95,15 +93,15 @@ metrics = {'recall': [],
            'ndcg': [],
            'blockbuster_share': []
            }
-path = '/Users/xun/Documents/Thesis/Improving-RNN-recommendation-model/Dataset/'
-dirname= "ks-likes-1y-v2"
+path = '/Users/xun/Documents/Thesis/RNN-model/'
+dirname= "ks-cooks-1y"
 # dirname= "ml-1M"
 # model_name = 'rnn_cce_ml30_bs64_ne50.0_gc100_e8_h50_Ug_lr0.1_nt1.ktf'
-model_name = 'rnn_cce_ml60_bs128_ne1899.935_gc100_e100_h100_Ug_lr0.1_nt1.ktf' #ks-cooks-2y
+model_name = 'rnn_cce_ml60_bs32_ne3378.139_gc100_e100_h100_Ug_lr0.1_nt1.hdf5'
 # model_name = 'rnn_cce_ml30_bs64_ne28.337_gc100_e8_h50_Ug_lr0.1_nt1.ktf'
 dataset = DataHandler(dirname=dirname)
 
-model = load_model(path + dirname + '/models/ktf/'+ model_name)
+model = load_model('/Users/xun/Documents/Thesis/RNN-model/ks-cooks-1y/models/' + model_name)
 
 # model.summary()
 #
@@ -147,7 +145,9 @@ for sequence, user_id in dataset.test_set(epochs=1):
 
     recommendations_pop10 = pop_k_recommendations(model, viewed, max_length, embedding_size,10)
 
-    # with open(path+dirname + '/data/implicit_predictions.pickle', 'rb') as fp:
+############Import the results from implicit model directly and evaluate############
+
+    # with open(path+dirname + '/data/implicit_predictions_als150.pickle', 'rb') as fp:
     #     implicit_predictions = pickle.load(fp)
     # recommendations = [item[0] for item in implicit_predictions[index]]
 
@@ -179,9 +179,12 @@ for sequence, user_id in dataset.test_set(epochs=1):
     #
     # for item in goal:
     #     test_output.append([user_id, item])
+
+    # Here add the goal list and recommendation list
     ev_i = evaluation.Evaluator(dataset, k=10)
-    ev_i.add_instance(goal, recommendations_pop10)
-    ev.add_instance(goal, recommendations_pop10)
+
+    ev_i.add_instance(goal, recommendations)
+    ev.add_instance(goal, recommendations)
 
     metrics['recall'].append(ev_i.average_recall())
     metrics['sps'].append(ev_i.sps())
@@ -192,49 +195,7 @@ for sequence, user_id in dataset.test_set(epochs=1):
     metrics['blockbuster_share'].append(ev_i.blockbuster_share())
 
     score[user_id] = [metrics['sps'][-1], metrics['precision'][-1]]
-    ##################### check the output of the cost function ###################
-    # Y = np.zeros((1, n_items), dtype='int')
-    # Y[0][goal[0]] = 1.
-    #
-    # test_loss = model.test_on_batch(input, Y)
-    #
-    # y_true = tf.convert_to_tensor(Y, np.float32)
-    # y_prep = tf.convert_to_tensor(output, np.float32)
-    #
-    # # error_1 = K.eval(binary_crossentropy(y_true, y_prep))
-    # # error_2 = K.eval(categorical_crossentropy(y_true, y_prep))
-    #
-    #
-    # def gpu_diag_wide(X):
-    #     E = be.eye(*X.shape)
-    #     return be.sum(X * E, axis=1)
 
-    # def bpr(yhat):
-    #     return be.mean(-be.log(be.sigmoid(tf.expand_dims(gpu_diag_wide(yhat), 1) - yhat)))
-
-    # def bpr_loss(y_true, y_pred):
-    #     diff = tf.expand_dims(y_pred[0], 1) - y_pred[0]
-    #     # sig = be.sigmoid(diff)
-    #     sig = be.square(diff)
-    #     log_loss = - be.log(sig)
-    #     log_loss_mean = be.mean(log_loss, axis=1)
-    #     loss = tf.tensordot(y_true, log_loss_mean, axes=1)
-    #     return loss
-    # cost1 = be.eval(bpr(output[0]))
-    # cost2 = be.eval(bpr_loss(y_true,y_prep))
-    # print(cost1)
-    ############################################################################
-
-    ##########################Intermediate result print#########################
-    # intermediate_model = Model(inputs=model.layers[0].input,
-    #                            outputs=[l.output for l in model.layers[1:]])
-    # intermediate_output = intermediate_model.predict(input)
-    # print(intermediate_output)
-    ##########################Intermediate result print#########################
-
-    # print(user_id, recommendations)
-    # print(user_id, rec_prob, metrics['sps'][-1], metrics['precision'][-1])
-    # ev_i.instances = []
     index +=1
 print(len(set(target)), len(set(rec_l)))
 
@@ -248,20 +209,21 @@ for m in metrics_t:
 
     print(m + '@' + str(ev.k) + ': ', ev.metrics[m]())
 
-# outfile = path+dirname+'/data/test_u_id_emb16.pickle'
-# outfile1 = path+dirname+'/data/rec_dict_emb16.pickle'
-# outfile2 = path+dirname+'/data/score_dict_emb16.pickle'
-# outfile3 = path+dirname+'/data/true_positive_emb16.pickle'
+# outfile = path+dirname+'/data/test_u_id.pickle'
+outfile1 = path+dirname+'/data/rec_dict.pickle'
+outfile2 = path+dirname+'/data/score_dict.pickle'
+outfile3 = path+dirname+'/data/true_positive.pickle'
+
 # # outfile4 = path+dirname+'/data/true_positive_imp.pickle'
 # outfile5 = path+dirname+'/data/rnn_predictions_emb16.pickle'
 # with open(outfile, 'wb') as fp:
 #     pickle.dump(test_u_id, fp)
-# with open(outfile1, 'wb') as fp:
-#     pickle.dump(rec_dict, fp, protocol=pickle.HIGHEST_PROTOCOL)
-# with open(outfile2, 'wb') as fp:
-#     pickle.dump(score, fp, protocol=pickle.HIGHEST_PROTOCOL)
-# with open(outfile3, 'wb') as fp:
-#     pickle.dump(true_positive, fp, protocol=pickle.HIGHEST_PROTOCOL)
+with open(outfile1, 'wb') as fp:
+    pickle.dump(rec_dict, fp, protocol=pickle.HIGHEST_PROTOCOL)
+with open(outfile2, 'wb') as fp:
+    pickle.dump(score, fp, protocol=pickle.HIGHEST_PROTOCOL)
+with open(outfile3, 'wb') as fp:
+    pickle.dump(true_positive, fp, protocol=pickle.HIGHEST_PROTOCOL)
 # with open(outfile5, 'wb') as fp:
 #     pickle.dump(rec, fp, protocol=pickle.HIGHEST_PROTOCOL)
 #
