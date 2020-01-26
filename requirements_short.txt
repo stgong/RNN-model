@@ -155,7 +155,7 @@ python-axolotl-curve25519==0.1
 python-dateutil==2.6.1
 python-debian==0.1.32
 python-debianbts==2.7.2
-python-gnupg==0.4.1
+python-gnupg==0.4.4
 python-magic==0.4.16
 python-mimeparse==0.1.4
 python-snappy==0.5
