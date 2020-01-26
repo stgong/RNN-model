@@ -17,7 +17,7 @@ bleach==3.0.2
 blinker==1.4
 Brlapi==0.6.6
 bsddb3==6.1.0
-buildbot===1.1.1-3ubuntu5
+buildbot===1.8.2
 buildbot-worker===1.1.1-3ubuntu5
 cachetools==3.1.1
 catfish==1.4.4
